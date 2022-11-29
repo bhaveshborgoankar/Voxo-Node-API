@@ -1,0 +1,28 @@
+{
+  "name": "voxo",
+  "version": "1.0.0",
+  "description": "Voxo NodeJs API",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon --experimental-json-modules",
+    "start": "node --experimental-json-modules example.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.1",
+    "cookie-parser": "^1.4.6",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.7.3",
+    "swagger-ui-express": "^4.6.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
