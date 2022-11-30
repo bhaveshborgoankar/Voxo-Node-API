@@ -1,12 +1,12 @@
 "use strict";
-import express from 'express';
-import session from 'express-session';
-import bodyParser from 'body-parser';
-import cookieParser from 'cookie-parser';
-import swaggerUi from 'swagger-ui-express';
-import server from 'http';
-import swagger from './swagger.json' assert { type: "json" };
-import router from './routes/index.routes.js';
+const express = require('express');
+const server = require('http');
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
+const routes = require('./routes/index.routes');
 
 var app = express();
 /* Set headers */
@@ -29,8 +29,8 @@ app.use(bodyParser.json());
 app.use(
     session({ secret: "voxo-secret", resave: true, saveUninitialized: true })
 );
-app.use('/', router);
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swagger));
+app.use('/', routes);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use((req, res, next) => {
     const error = new Error("Not Found")
     error.status = 404
