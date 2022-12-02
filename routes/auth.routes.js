@@ -1,9 +1,9 @@
-const express = require('express');
+import express from 'express'
+import authController from '../controllers/auth.controller.js';
+import { FinalResult, validateLogin, isEmailExist } from '../validation/index.js';
 const router = express.Router();
-const authController = require('../controllers/login.controller');
 
+router.post('/register', [isEmailExist, validateLogin, FinalResult], authController.register)
+router.post('/login', validateLogin, authController.login)
 
-router.post('/login', authController.login)
-router.get('/getdata', authController.getLoginData)
-
-module.exports = router;
+export default router

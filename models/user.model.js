@@ -1,11 +1,12 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
+import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs'
 
 // User schema
 var userSchema = new mongoose.Schema({
-    name: { type: String, required: true },
+    name: { type: String },
     email: { type: String, required: true, lowercase: true },
     password: { type: String, required: true },
+    confirm_password: { type: String },
     phone: { type: Number, required: true },
     is_deleted: { type: Boolean, default: false },
     is_active: { type: Boolean }
@@ -28,7 +29,10 @@ userSchema.pre('save', async function (next) {
         console.log("hashed", hashed);
         return next();
     } catch (err) {
+        console.log("Modal ERRRRRRR")
         return next(err);
     }
 });
-module.exports = mongoose.model('User', userSchema);
+
+const UserModal = mongoose.model('User', userSchema);
+export { UserModal }

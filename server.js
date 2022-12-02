@@ -1,14 +1,15 @@
 "use strict";
-const express = require('express');
-const server = require('http');
-const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
-const session = require('express-session');
-const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('./swagger.json');
-const routes = require('./routes/index.routes');
+import express from 'express';
+import server from 'http'
+import bodyParser from 'body-parser'
+import cookieParser from 'cookie-parser'
+import session from 'express-session'
+import swaggerUi from 'swagger-ui-express'
+import swaggerDocument from './swagger.json' assert { type: "json" };
+import routes from './routes/index.routes.js'
 
 var app = express();
+const Port = process.env.APP_PORT || 3000
 /* Set headers */
 app.use(function (req, res, next) {
     res.setHeader("Access-Control-Allow-Origin", "*");
@@ -46,6 +47,6 @@ app.use((error, req, res, next) => {
 })
 /* Bind server on default port of https */
 var Server = server.createServer(app);
-Server.listen(3000, function () {
-    console.log("Server listening on port 3000");
+Server.listen(Port, function () {
+    console.log('Server listening on port ' + 'http://localhost:' + Port);
 });

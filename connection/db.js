@@ -1,4 +1,5 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose'
+import { UserModal } from '../models/user.model.js';
 
 const url = "mongodb://localhost:27017/voxoAPI"; // this is a kind of mongodb config, mernstack is db name
 
@@ -14,6 +15,6 @@ try {
     console.log(error);
 }
 
-module.exports = {
-    User: require('../models/user.model'),
-};
+const User = UserModal;
+
+export { User }
