@@ -1,4 +1,4 @@
-import { check, body, validationResult } from 'express-validator'
+import { body, validationResult } from 'express-validator'
 import { User } from '../connection/db.js';
 
 export const validateLogin = [

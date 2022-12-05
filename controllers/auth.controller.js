@@ -1,15 +1,15 @@
 import { User } from '../connection/db.js';
 import bcrypt from 'bcryptjs'
-import { Jwt } from 'jsonwebtoken';
+import { getToken } from '../middleware/jwt.middleware.js';
 
 const authController = {
-    //Login
+    // Login
     login: async (req, res, next) => {
         try {
             const { email, password } = req.body
             User.find({ email: email }, function (err, user) {
                 if (err) {
-                    res.status(404).send("ERR")
+                    res.status(404).send("ERR");
                 } else {
                     if (user.length >= 1) {
                         bcrypt.compare(password, user[0].password, (err, isMatch) => {
@@ -17,7 +17,6 @@ const authController = {
                                 res.status(404).json({ message: "Password Not Match", err: err })
                             } else {
                                 if (isMatch) {
-                                    Jwt.sign()
                                     res.status(200).json({ message: "Successfully Login" })
                                 } else {
                                     res.status(404).json({ message: "Password Not Match" })
@@ -36,7 +35,7 @@ const authController = {
         }
     },
 
-    //Register
+    // Register
     register: async (req, res, next) => {
         try {
             const { email, password, name, phone, confirm_password } = req.body;
@@ -48,17 +47,37 @@ const authController = {
                     const user = User.create({
                         email: email,
                         password: password,
-                        // if we want to add this field to database then we need to convert in bcrypt.
-                        // confirm_password: confirm_password,
                         name: name,
-                        phone: phone
+                        phone: phone,
+                        token: getToken(email)
                     })
-                    res.status(200).json({ message: "Successfully Register", data: user })
+                    res.status(200).json({ message: "Successfully Register", data: user, token: getToken(email) })
                 }
             }
         } catch (error) {
             console.log("error", error)
             res.status(404).json({ message: error })
+        }
+    },
+
+    // ForgetPassword
+    forget_password: async (req, res, next) => {
+        try {
+            const { email } = req.body
+            User.findOne({ email: email }, function (err, user) {
+                if (err) {
+                    console.log("ERRRR", err)
+                } else {
+                    if (user !== null) {
+                        res.status(201).json({ data: email })
+                    } else {
+                        res.status(400).json({ message: "User not Exist!" })
+                    }
+                }
+            })
+        } catch (err) {
+            console.log("Forget Password Error", err)
+            res.status(400).json({ message: err.message })
         }
     }
 }

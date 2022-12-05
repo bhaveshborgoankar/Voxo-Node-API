@@ -1,3 +1,1740 @@
 {
-    "message": ""
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Voxo Node Web-API"
+    },
+    "host": "localhost:3000",
+    "basePath": "",
+    "tags": [
+        {
+            "name": "Authentication",
+            "description": "API for Authentication in the system"
+        },
+        {
+            "name": "Account",
+            "description": "API for Account in the system"
+        },
+        {
+            "name": "Currency",
+            "description": "API for Currency in the system"
+        },
+        {
+            "name": "Language",
+            "description": "API for Language in the system"
+        },
+        {
+            "name": "Coin",
+            "description": "API for Coin in the system"
+        },
+        {
+            "name": "Menu",
+            "description": "API for Menu in the system"
+        },
+        {
+            "name": "Page",
+            "description": "API for Page in the system"
+        },
+        {
+            "name": "Section",
+            "description": "API for Section in the system"
+        },
+        {
+            "name": "Setting",
+            "description": "API for Setting in the system"
+        }
+    ],
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "paths": {
+        "/account": {
+            "get": {
+                "tags": [
+                    "Account"
+                ],
+                "description": "Get User Details",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "405": {
+                        "description": "Invalid input",
+                        "content": {}
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ]
+            }
+        },
+        "/updateProfile": {
+            "put": {
+                "tags": [
+                    "Account"
+                ],
+                "description": "Update User Details",
+                "parameters": [
+                    {
+                        "name": "Update Profile",
+                        "in": "body",
+                        "schema": {
+                            "required": [
+                                "name",
+                                "email"
+                            ],
+                            "properties": {
+                                "name": {
+                                    "type": "string"
+                                },
+                                "email": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "405": {
+                        "description": "Invalid input",
+                        "content": {}
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ]
+            }
+        },
+        "/updatePassword": {
+            "put": {
+                "tags": [
+                    "Account"
+                ],
+                "description": "Update User password",
+                "parameters": [
+                    {
+                        "name": "Update Password",
+                        "in": "body",
+                        "schema": {
+                            "required": [
+                                "currentPassword",
+                                "newPassword",
+                                "reNewPassword"
+                            ],
+                            "properties": {
+                                "currentPassword": {
+                                    "type": "string"
+                                },
+                                "newPassword": {
+                                    "type": "string"
+                                },
+                                "reNewPassword": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "405": {
+                        "description": "Invalid input",
+                        "content": {}
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ]
+            }
+        },
+        "/coins": {
+            "get": {
+                "tags": [
+                    "Coin"
+                ],
+                "description": "Get Coin Data",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "405": {
+                        "description": "Invalid input",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/coin/store": {
+            "post": {
+                "tags": [
+                    "Coin"
+                ],
+                "description": "Store Coin Details",
+                "parameters": [
+                    {
+                        "name": "Store Coin",
+                        "in": "body",
+                        "schema": {
+                            "required": [
+                                "display_name",
+                                "name"
+                            ],
+                            "properties": {
+                                "display_name": {
+                                    "type": "string"
+                                },
+                                "name": {
+                                    "type": "string"
+                                },
+                                "quotes": {
+                                    "type": "object"
+                                },
+                                "is_active": {
+                                    "type": "boolean"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "405": {
+                        "description": "Invalid input",
+                        "content": {}
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ]
+            }
+        },
+        "/coin/edit/{coin_id}": {
+            "get": {
+                "tags": [
+                    "Coin"
+                ],
+                "description": "Get Coin By Id",
+                "parameters": [
+                    {
+                        "name": "coin_id",
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "405": {
+                        "description": "Invalid input",
+                        "content": {}
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ]
+            }
+        },
+        "/coin/update/{coin_id}": {
+            "put": {
+                "tags": [
+                    "Coin"
+                ],
+                "description": "Update Coin Details",
+                "parameters": [
+                    {
+                        "name": "coin_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Update Coin",
+                        "in": "body",
+                        "schema": {
+                            "required": [
+                                "display_name",
+                                "name"
+                            ],
+                            "properties": {
+                                "disaplay_name": {
+                                    "type": "string"
+                                },
+                                "name": {
+                                    "type": "string"
+                                },
+                                "quotes": {
+                                    "type": "object"
+                                },
+                                "is_active": {
+                                    "type": "boolean"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "405": {
+                        "description": "Invalid input",
+                        "content": {}
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ]
+            }
+        },
+        "/coin/delete/{coin_id}": {
+            "put": {
+                "tags": [
+                    "Coin"
+                ],
+                "description": "Delete Coin Details",
+                "parameters": [
+                    {
+                        "name": "coin_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "405": {
+                        "description": "Invalid input",
+                        "content": {}
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ]
+            }
+        },
+        "/coin/pairs": {
+            "get": {
+                "tags": [
+                    "Coin"
+                ],
+                "description": "Get Coin Data",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "symbol",
+                        "in": "query",
+                        "type": "string",
+                        "format": "symbol",
+                        "required": false
+                    },
+                    {
+                        "name": "quoteCurrency",
+                        "in": "query",
+                        "type": "string",
+                        "format": "quoteCurrency",
+                        "required": false
+                    }
+                ],
+                "responses": {
+                    "405": {
+                        "description": "Invalid input",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/coin/pair/store": {
+            "post": {
+                "tags": [
+                    "Coin"
+                ],
+                "description": "Store Coin Details",
+                "parameters": [
+                    {
+                        "name": "Store Coin",
+                        "in": "body",
+                        "schema": {
+                            "required": [
+                                "pairs"
+                            ],
+                            "properties": {
+                                "pairs": {
+                                    "type": "array"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "405": {
+                        "description": "Invalid input",
+                        "content": {}
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ]
+            }
+        },
+        "/coin/pair/edit/{coin_pair_id}": {
+            "get": {
+                "tags": [
+                    "Coin"
+                ],
+                "description": "Get Coin By Id",
+                "parameters": [
+                    {
+                        "name": "coin_pair_id",
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "405": {
+                        "description": "Invalid input",
+                        "content": {}
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ]
+            }
+        },
+        "/coin/pair/update": {
+            "put": {
+                "tags": [
+                    "Coin"
+                ],
+                "description": "Update Coin Details",
+                "parameters": [
+                    {
+                        "name": "Update Coin",
+                        "in": "body",
+                        "schema": {
+                            "required": [
+                                "pairs"
+                            ],
+                            "properties": {
+                                "pairs": {
+                                    "type": "array"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "405": {
+                        "description": "Invalid input",
+                        "content": {}
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ]
+            }
+        },
+        "/coin/pair/delete/{coin_pair_id}": {
+            "put": {
+                "tags": [
+                    "Coin"
+                ],
+                "description": "Delete Coin Details",
+                "parameters": [
+                    {
+                        "name": "coin_pair_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "405": {
+                        "description": "Invalid input",
+                        "content": {}
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ]
+            }
+        },
+        "/currencies": {
+            "get": {
+                "tags": [
+                    "Currency"
+                ],
+                "description": "Get Currency Data",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "405": {
+                        "description": "Invalid input",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/currency/store": {
+            "post": {
+                "tags": [
+                    "Currency"
+                ],
+                "description": "Store Currency Details",
+                "parameters": [
+                    {
+                        "name": "Store Currency",
+                        "in": "body",
+                        "schema": {
+                            "required": [
+                                "name"
+                            ],
+                            "properties": {
+                                "name": {
+                                    "type": "string"
+                                },
+                                "is_active": {
+                                    "type": "boolean"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "405": {
+                        "description": "Invalid input",
+                        "content": {}
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ]
+            }
+        },
+        "/currency/edit/{currency_id}": {
+            "get": {
+                "tags": [
+                    "Currency"
+                ],
+                "description": "Get Currency By Id",
+                "parameters": [
+                    {
+                        "name": "currency_id",
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "405": {
+                        "description": "Invalid input",
+                        "content": {}
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ]
+            }
+        },
+        "/currency/update/{currency_id}": {
+            "put": {
+                "tags": [
+                    "Currency"
+                ],
+                "description": "Update Currency Details",
+                "parameters": [
+                    {
+                        "name": "currency_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Update Currency",
+                        "in": "body",
+                        "schema": {
+                            "required": [
+                                "name"
+                            ],
+                            "properties": {
+                                "name": {
+                                    "type": "string"
+                                },
+                                "is_active": {
+                                    "type": "boolean"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "405": {
+                        "description": "Invalid input",
+                        "content": {}
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ]
+            }
+        },
+        "/currency/delete/{currency_id}": {
+            "put": {
+                "tags": [
+                    "Currency"
+                ],
+                "description": "Delete Currency Details",
+                "parameters": [
+                    {
+                        "name": "currency_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "405": {
+                        "description": "Invalid input",
+                        "content": {}
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ]
+            }
+        },
+        "/languages": {
+            "get": {
+                "tags": [
+                    "Language"
+                ],
+                "description": "Get Language Data",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "405": {
+                        "description": "Invalid input",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/language/store": {
+            "post": {
+                "tags": [
+                    "Language"
+                ],
+                "description": "Store Language Details",
+                "parameters": [
+                    {
+                        "name": "Store Language",
+                        "in": "body",
+                        "schema": {
+                            "required": [
+                                "name"
+                            ],
+                            "properties": {
+                                "name": {
+                                    "type": "string"
+                                },
+                                "is_active": {
+                                    "type": "boolean"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "405": {
+                        "description": "Invalid input",
+                        "content": {}
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ]
+            }
+        },
+        "/language/edit/{languages_id}": {
+            "get": {
+                "tags": [
+                    "Language"
+                ],
+                "description": "Get Language By Id",
+                "parameters": [
+                    {
+                        "name": "language_id",
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "405": {
+                        "description": "Invalid input",
+                        "content": {}
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ]
+            }
+        },
+        "/language/update/{languages_id}": {
+            "put": {
+                "tags": [
+                    "Language"
+                ],
+                "description": "Update Language Details",
+                "parameters": [
+                    {
+                        "name": "language_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Update Language",
+                        "in": "body",
+                        "schema": {
+                            "required": [
+                                "name"
+                            ],
+                            "properties": {
+                                "name": {
+                                    "type": "string"
+                                },
+                                "is_active": {
+                                    "type": "boolean"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "405": {
+                        "description": "Invalid input",
+                        "content": {}
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ]
+            }
+        },
+        "/language/delete/{languages_id}": {
+            "put": {
+                "tags": [
+                    "Language"
+                ],
+                "description": "Delete Language Details",
+                "parameters": [
+                    {
+                        "name": "language_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "405": {
+                        "description": "Invalid input",
+                        "content": {}
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ]
+            }
+        },
+        "/menu/menu-items": {
+            "get": {
+                "tags": [
+                    "Menu"
+                ],
+                "description": "Get All Menus with their items",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "405": {
+                        "description": "Invalid input",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/menus": {
+            "get": {
+                "tags": [
+                    "Menu"
+                ],
+                "description": "Get All Menus",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "405": {
+                        "description": "Invalid input",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/menu/store": {
+            "post": {
+                "tags": [
+                    "Menu"
+                ],
+                "description": "Store Menu Details",
+                "parameters": [
+                    {
+                        "name": "Store Menu",
+                        "in": "body",
+                        "schema": {
+                            "required": [
+                                "name",
+                                "slug"
+                            ],
+                            "properties": {
+                                "name": {
+                                    "type": "string"
+                                },
+                                "slug": {
+                                    "type": "string"
+                                },
+                                "is_active": {
+                                    "type": "boolean"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "405": {
+                        "description": "Invalid input",
+                        "content": {}
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ]
+            }
+        },
+        "/menu/edit/{menu_id}": {
+            "get": {
+                "tags": [
+                    "Menu"
+                ],
+                "description": "Get Menu By Id",
+                "parameters": [
+                    {
+                        "name": "menu_id",
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "405": {
+                        "description": "Invalid input",
+                        "content": {}
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ]
+            }
+        },
+        "/menu/update/{menu_id}": {
+            "put": {
+                "tags": [
+                    "Menu"
+                ],
+                "description": "Update Menu Details",
+                "parameters": [
+                    {
+                        "name": "menu_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Update Menu",
+                        "in": "body",
+                        "schema": {
+                            "required": [
+                                "name",
+                                "slug"
+                            ],
+                            "properties": {
+                                "name": {
+                                    "type": "string"
+                                },
+                                "slug": {
+                                    "type": "string"
+                                },
+                                "is_active": {
+                                    "type": "boolean"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "405": {
+                        "description": "Invalid input",
+                        "content": {}
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ]
+            }
+        },
+        "/menu/delete/{menu_id}": {
+            "put": {
+                "tags": [
+                    "Menu"
+                ],
+                "description": "Delete Menu",
+                "parameters": [
+                    {
+                        "name": "menu_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "405": {
+                        "description": "Invalid input",
+                        "content": {}
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ]
+            }
+        },
+        "/menu-items/{menu_id}": {
+            "get": {
+                "tags": [
+                    "Menu"
+                ],
+                "description": "Get All Menu Items By Menu Id",
+                "parameters": [
+                    {
+                        "name": "menu_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "405": {
+                        "description": "Invalid input",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/menu-item/store": {
+            "post": {
+                "tags": [
+                    "Menu"
+                ],
+                "description": "Store Menu Item Details",
+                "parameters": [
+                    {
+                        "name": "Store Menu Item",
+                        "in": "body",
+                        "schema": {
+                            "required": [
+                                "menu_id",
+                                "name",
+                                "level"
+                            ],
+                            "properties": {
+                                "menu_id": {
+                                    "type": "string"
+                                },
+                                "name": {
+                                    "type": "string"
+                                },
+                                "url": {
+                                    "type": "string"
+                                },
+                                "icon": {
+                                    "type": "string"
+                                },
+                                "target": {
+                                    "type": "string"
+                                },
+                                "sort": {
+                                    "type": "integer"
+                                },
+                                "level": {
+                                    "type": "integer"
+                                },
+                                "parent_id": {
+                                    "type": "string"
+                                },
+                                "is_active": {
+                                    "type": "boolean"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "405": {
+                        "description": "Invalid input",
+                        "content": {}
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ]
+            }
+        },
+        "/menu-item/edit/{menu_item_id}": {
+            "get": {
+                "tags": [
+                    "Menu"
+                ],
+                "description": "Get Menu Item By Id",
+                "parameters": [
+                    {
+                        "name": "menu_id",
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "405": {
+                        "description": "Invalid input",
+                        "content": {}
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ]
+            }
+        },
+        "/menu-item/update/{menu_item_id}": {
+            "put": {
+                "tags": [
+                    "Menu"
+                ],
+                "description": "Update Menu Item Details",
+                "parameters": [
+                    {
+                        "name": "menu_item_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Update Menu Item",
+                        "in": "body",
+                        "schema": {
+                            "required": [
+                                "menu_id",
+                                "name",
+                                "level"
+                            ],
+                            "properties": {
+                                "menu_id": {
+                                    "type": "string"
+                                },
+                                "name": {
+                                    "type": "string"
+                                },
+                                "url": {
+                                    "type": "string"
+                                },
+                                "icon": {
+                                    "type": "string"
+                                },
+                                "target": {
+                                    "type": "string"
+                                },
+                                "sort": {
+                                    "type": "integer"
+                                },
+                                "level": {
+                                    "type": "integer"
+                                },
+                                "parent_id": {
+                                    "type": "string"
+                                },
+                                "is_active": {
+                                    "type": "boolean"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "405": {
+                        "description": "Invalid input",
+                        "content": {}
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ]
+            }
+        },
+        "/menu-item/delete/{menu_item_id}": {
+            "put": {
+                "tags": [
+                    "Menu"
+                ],
+                "description": "Delete Menu Item",
+                "parameters": [
+                    {
+                        "name": "menu_item_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "405": {
+                        "description": "Invalid input",
+                        "content": {}
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ]
+            }
+        },
+        "/menu-item/update/order/{menu_item_id}": {
+            "put": {
+                "tags": [
+                    "Menu"
+                ],
+                "description": "Update Menu Item Details",
+                "parameters": [
+                    {
+                        "name": "menu_item_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Update Menu Item",
+                        "in": "body",
+                        "schema": {
+                            "required": [
+                                "items"
+                            ],
+                            "properties": {
+                                "items": {
+                                    "type": "array"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "405": {
+                        "description": "Invalid input",
+                        "content": {}
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ]
+            }
+        },
+        "/pages": {
+            "get": {
+                "tags": [
+                    "Page"
+                ],
+                "description": "Get All Page",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "405": {
+                        "description": "Invalid input",
+                        "content": {}
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ]
+            }
+        },
+        "/page/{slug}": {
+            "get": {
+                "tags": [
+                    "Page"
+                ],
+                "description": "Get Page by slug",
+                "parameters": [
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "405": {
+                        "description": "Invalid input",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/page/store": {
+            "post": {
+                "tags": [
+                    "Page"
+                ],
+                "description": "Store Page Details",
+                "parameters": [
+                    {
+                        "name": "Store Page",
+                        "in": "body",
+                        "schema": {
+                            "required": [
+                                "name",
+                                "slug"
+                            ],
+                            "properties": {
+                                "name": {
+                                    "type": "string"
+                                },
+                                "slug": {
+                                    "type": "string"
+                                },
+                                "content": {
+                                    "type": "string"
+                                },
+                                "is_active": {
+                                    "type": "boolean"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "405": {
+                        "description": "Invalid input",
+                        "content": {}
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ]
+            }
+        },
+        "/page/edit/{page_id}": {
+            "get": {
+                "tags": [
+                    "Page"
+                ],
+                "description": "Get Page By Id",
+                "parameters": [
+                    {
+                        "name": "page_id",
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "405": {
+                        "description": "Invalid input",
+                        "content": {}
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ]
+            }
+        },
+        "/page/update/{page_id}": {
+            "put": {
+                "tags": [
+                    "Page"
+                ],
+                "description": "Update Page Details",
+                "parameters": [
+                    {
+                        "name": "page_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Update Page",
+                        "in": "body",
+                        "schema": {
+                            "required": [
+                                "name",
+                                "slug"
+                            ],
+                            "properties": {
+                                "name": {
+                                    "type": "string"
+                                },
+                                "slug": {
+                                    "type": "string"
+                                },
+                                "content": {
+                                    "type": "string"
+                                },
+                                "is_active": {
+                                    "type": "boolean"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "405": {
+                        "description": "Invalid input",
+                        "content": {}
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ]
+            }
+        },
+        "/page/delete/{page_id}": {
+            "put": {
+                "tags": [
+                    "Page"
+                ],
+                "description": "Delete Page",
+                "parameters": [
+                    {
+                        "name": "page_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "405": {
+                        "description": "Invalid input",
+                        "content": {}
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ]
+            }
+        },
+        "/section/{name}": {
+            "get": {
+                "tags": [
+                    "Section"
+                ],
+                "description": "Get Section by name",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "405": {
+                        "description": "Invalid input",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/section/update/{name}": {
+            "put": {
+                "tags": [
+                    "Section"
+                ],
+                "description": "Update Section by name",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Update Section",
+                        "in": "body",
+                        "schema": {
+                            "properties": {
+                                "content": {
+                                    "type": "object"
+                                },
+                                "is_active": {
+                                    "type": "boolean"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "405": {
+                        "description": "Invalid input",
+                        "content": {}
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ]
+            }
+        },
+        "/settings": {
+            "get": {
+                "tags": [
+                    "Setting"
+                ],
+                "description": "Get Setting Data",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "405": {
+                        "description": "Invalid input",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/setting/update": {
+            "put": {
+                "tags": [
+                    "Setting"
+                ],
+                "description": "Update Setting Details",
+                "parameters": [
+                    {
+                        "name": "Update Setting",
+                        "in": "body",
+                        "schema": {
+                            "properties": {
+                                "logo": {
+                                    "type": "string"
+                                },
+                                "site_title": {
+                                    "type": "string"
+                                },
+                                "signup_url": {
+                                    "type": "string"
+                                },
+                                "signin_url": {
+                                    "type": "string"
+                                },
+                                "facebook_url": {
+                                    "type": "string"
+                                },
+                                "twitter_url": {
+                                    "type": "string"
+                                },
+                                "linkedin_url": {
+                                    "type": "string"
+                                },
+                                "instagram_url": {
+                                    "type": "string"
+                                },
+                                "footer_text": {
+                                    "type": "string"
+                                },
+                                "copyright_text": {
+                                    "type": "string"
+                                },
+                                "crypto_exchange_api": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "405": {
+                        "description": "Invalid input",
+                        "content": {}
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ]
+            }
+        },
+        "/upload": {
+            "post": {
+                "tags": [
+                    "Setting"
+                ],
+                "description": "Upload Image",
+                "parameters": [
+                    {
+                        "name": "image",
+                        "in": "formData",
+                        "description": "Upload Image",
+                        "required": true,
+                        "type": "file"
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "405": {
+                        "description": "Invalid input",
+                        "content": {}
+                    }
+                },
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ]
+            }
+        }
+    },
+    "securityDefinitions": {
+        "JWT": {
+            "description": "",
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    },
+    "definitions": {}
 }
