@@ -9,6 +9,8 @@ router.post('/register', [isEmailExist, validateLogin, FinalResult], authControl
 // Login
 router.post('/login', validateLogin, authController.login);
 // Forgot Password
-router.post('/forget_password', authController.forget_password)
+router.post('/forget_password', authController.forget_password);
+// Reset Password
+router.post('/reset_password', authController.forget_password);
 
 export default router;
