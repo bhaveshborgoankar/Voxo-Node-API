@@ -9,7 +9,9 @@ var userSchema = new mongoose.Schema({
     confirm_password: { type: String },
     phone: { type: Number, required: true },
     is_deleted: { type: Boolean, default: false },
-    is_active: { type: Boolean }
+    is_active: { type: Boolean },
+    random_string: { type: String },
+    token: { type: String }
 },
     {
         timestamps: {

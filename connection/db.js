@@ -3,7 +3,7 @@ import { UserModal } from '../models/user.model.js';
 
 const url = "mongodb://localhost:27017/voxoAPI"; // this is a kind of mongodb config, mernstack is db name
 
-/** connect to MongoDB datastore */
+/* connect to MongoDB datastore */
 try {
     mongoose.connect(url, {
         useNewUrlParser: true,

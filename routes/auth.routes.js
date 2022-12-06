@@ -6,11 +6,14 @@ const router = express.Router();
 
 // Register
 router.post('/register', [isEmailExist, validateLogin, FinalResult], authController.register);
+
 // Login
 router.post('/login', validateLogin, authController.login);
+
 // Forgot Password
 router.post('/forget_password', authController.forget_password);
+
 // Reset Password
-router.post('/reset_password', authController.forget_password);
+router.get('/reset_password', authController.reset_password);
 
 export default router;

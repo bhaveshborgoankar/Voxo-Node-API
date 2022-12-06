@@ -1,6 +1,7 @@
 "use strict";
 import express from 'express';
 import server from 'http'
+import * as dotenv from 'dotenv'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import session from 'express-session'
@@ -9,6 +10,7 @@ import swaggerDocument from './swagger.json' assert { type: "json" };
 import routes from './routes/index.routes.js'
 
 var app = express();
+dotenv.config()
 const Port = process.env.APP_PORT || 3000
 /* Set headers */
 app.use(function (req, res, next) {
@@ -48,5 +50,5 @@ app.use((error, req, res, next) => {
 /* Bind server on default port of https */
 var Server = server.createServer(app);
 Server.listen(Port, function () {
-    console.log('Server listening on port ' + 'http://localhost:' + Port);
+    console.log('Server listening on port ' + process.env.PUBLIC_URL);
 });

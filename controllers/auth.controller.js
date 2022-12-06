@@ -1,39 +1,35 @@
-import { User } from '../connection/db.js';
 import bcrypt from 'bcryptjs'
-import { getToken } from '../middleware/jwt.middleware.js';
 import { of } from 'await-of';
 import randomstring from 'randomstring';
 import nodemailer from 'nodemailer'
-const sendResetPasswordMail = async (name, email, token) => {
+import { User } from '../connection/db.js';
+import { getToken } from '../middleware/jwt.middleware.js';
+const sendResetPasswordMail = async (name, email, random_string, subject) => {
     try {
         const transporter = nodemailer.createTransport({
-            host: 'smtp.gmail.com',
-            // host: 'smtp.ethereal.email',
-            post: 3000,
-            secure: false,
-            requireTLS: true,
+            host: "smtp.gmail.com",
+            port: 587,
             auth: {
-                user: 'webapp342@gmail.com',
-                pass: 'web@#342'
-            }
-        })
-        const mailOption = {
-            from: 'webapp342@gmail.com',
+                user: process.env.USER_EMAIL,
+                pass: process.env.USER_PASS
+            },
+        });
+        const mailOptions = {
+            from: process.env.USER_EMAIL,
             to: email,
-            subject: "For Reset Password",
-            text: "Hello world?", // plain text body
-            html: "<b>Hello world?</b>", // html body
-            // html: `<p>Hii ${name}, please click this link <a href="http://localhost:3000/reset_password?token=${token}"> to reset your password</a></p>`
-        }
-        transporter.sendMail(mailOption, function (err, info) {
+            subject: subject,
+            text: '',
+            html: `<p>Hii ${name}, please copy this link and <a href="http://localhost:3000/reset_password?random_string=${random_string}">reset your password</a></p>`
+        };
+        await transporter.sendMail(mailOptions, function (err, info) {
             if (err) {
-                console.log("Mail Error:", err)
+                console.log("Mail not sent!")
             } else {
-                console.log('Mail has been sent', info.response);
+                console.log({ info: info, message: "Successfully sent! Please check your mail." })
             }
-        })
+        });
     } catch (error) {
-        res.status(400).json({ message: error.message })
+        console.log({ message: error.message })
     }
 }
 const authController = {
@@ -99,18 +95,40 @@ const authController = {
         try {
             const { email } = req.body
             const [result] = await of(User.findOne({ email: email }))
-            console.log("result", result);
             if (result !== null) {
-                const randomString = randomstring.generate();
-                const data = await of(User.updateOne({ email: email }, { $set: { token: randomString } }))
-                sendResetPasswordMail(data.name, data.email, randomString)
-                res.status(200).json({ message: "Data sent to email! Please check your email", data: data })
+                const random_String = randomstring.generate();
+                let subject = "Forgot Password"
+                sendResetPasswordMail(result.name, result.email, random_String, subject)
+                const data = await of(User.updateOne({ email: email }, { $set: { random_string: random_String } }))
+                res.status(200).json({ message: "Successfully sent! Please check your mail.", data: data })
             } else {
                 res.status(400).json({ message: "User not found" })
             }
         } catch (err) {
             console.log("Forget Password Error", err)
             res.status(400).json({ message: err.message })
+        }
+    },
+    //Reset Password
+    reset_password: async (req, res, next) => {
+        try {
+            const random_string = req.query.random_string;
+            const tokenData = await of(User.findOne({ random_string: random_string }));
+            if (random_string !== '') {
+                if (tokenData[0] !== null) {
+                    const password = req.body.password
+                    const newPassword = await of(bcrypt.hashSync(password, 8))
+                    const userData = await of(User.findByIdAndUpdate({ _id: tokenData[0]._id }, { $set: { password: newPassword[0], random_string: '' } }, { new: true }))
+                    res.status(200).json({ message: 'User password has been reset', data: userData })
+                }
+                else {
+                    res.status(400).json({ message: 'Link has been expired' })
+                }
+            } else {
+                res.status(400).json({ message: 'Link has been expired' })
+            }
+        } catch (error) {
+            res.status(400).json({ message: error.message })
         }
     }
 }
