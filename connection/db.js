@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import { CategoryModal } from '../models/category.modal.js';
 import { UserModal } from '../models/user.model.js';
 
 const url = "mongodb://localhost:27017/voxoAPI"; // this is a kind of mongodb config, mernstack is db name
@@ -16,5 +17,6 @@ try {
 }
 
 const User = UserModal;
+const Category = CategoryModal
 
-export { User }
+export { User, Category }

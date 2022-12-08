@@ -1,3 +1,4 @@
+import { of } from 'await-of';
 import { body, validationResult } from 'express-validator'
 import { User } from '../connection/db.js';
 
@@ -24,10 +25,13 @@ function checkValidationResult(req, res, next) {
     }
 
 }
-const isEmailExist = isEmail
-function isEmail(req, res, next) {
-    User.findOne({ email: req.body.email }, function (err, user) {
+// const isEmailExist = isEmail
+const isEmailExist = async (req, res, next) => {
+    console.log("req.body29", req.body);
+    await of(User.findOne({ email: req.body.email }, function (err, user) {
+        console.log("34User", user);
         if (err) {
+            console.log("errrrrrrrrrrrrrrrrrrrrrrr");
             res.status(404).send("ERR")
         }
         if (user) {
@@ -35,9 +39,10 @@ function isEmail(req, res, next) {
             err.status = 400;
             return next(err);
         } else {
+            console.log("kfdjgbjkhifdgbjh")
             next();
         }
-    });
+    }));
 }
 
 export {

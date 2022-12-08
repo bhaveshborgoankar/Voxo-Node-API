@@ -2,6 +2,7 @@
 import express from 'express';
 import server from 'http'
 import * as dotenv from 'dotenv'
+import path from 'path';
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import session from 'express-session'
@@ -10,6 +11,8 @@ import swaggerDocument from './swagger.json' assert { type: "json" };
 import routes from './routes/index.routes.js'
 
 var app = express();
+const __dirname = path.resolve();
+app.use(express.json());
 dotenv.config()
 const Port = process.env.APP_PORT || 3000
 /* Set headers */
@@ -29,6 +32,7 @@ app.use(function (req, res, next) {
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use('/public', express.static(path.join(__dirname, '/public')));
 app.use(
     session({ secret: "voxo-secret", resave: true, saveUninitialized: true })
 );
