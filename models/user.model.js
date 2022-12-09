@@ -1,14 +1,10 @@
 import mongoose from 'mongoose';
-import bcrypt from 'bcryptjs'
+import bcrypt from 'bcryptjs';
 
 // User schema
 var userSchema = new mongoose.Schema({
-    name: {
-        type: String, required: true
-    },
-    email: {
-        type: String, required: true, lowercase: true
-    },
+    name: { type: String, required: true },
+    email: { type: String, required: true, lowercase: true },
     password: { type: String, required: true },
     confirm_password: { type: String },
     phone: { type: Number, required: true },
@@ -36,7 +32,6 @@ userSchema.pre('save', async function (next) {
         this.password = hashed;
         return next();
     } catch (err) {
-        console.log("Modal ERRRRRRR")
         return next(err);
     }
 });

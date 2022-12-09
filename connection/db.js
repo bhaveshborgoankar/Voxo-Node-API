@@ -2,14 +2,13 @@ import mongoose from 'mongoose'
 import { CategoryModal } from '../models/category.modal.js';
 import { UserModal } from '../models/user.model.js';
 
-const url = "mongodb://localhost:27017/voxoAPI"; // this is a kind of mongodb config, mernstack is db name
+const url = "mongodb://localhost:27017/voxoAPI";
 
 /* connect to MongoDB datastore */
 try {
     mongoose.connect(url, {
         useNewUrlParser: true,
-        useUnifiedTopology: true,
-        // useCreateIndex: true,
+        useUnifiedTopology: true
     });
     console.log("database connected");
 } catch (error) {

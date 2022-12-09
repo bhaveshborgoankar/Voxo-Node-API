@@ -6,7 +6,7 @@ import { isEmailExist, validateLogin } from "../validation/index.js";
 const router = express.Router();
 
 // Create User
-router.post('/create', isEmailExist, uploadImg.single("image"), userController.create)
+router.post('/create', isEmailExist, uploadImg.single("image"), userController.create);
 
 // Get Users
 router.get('/users', userController.index);
@@ -15,7 +15,7 @@ router.get('/users', userController.index);
 router.put('/user/:id', userController.edit);
 
 // Delete User
-router.delete('/user/:id', userController.delete)
+router.delete('/user/:id', userController.delete);
 
-export default router
+export default router;
 
