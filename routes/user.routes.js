@@ -1,21 +1,22 @@
 import express from "express";
 import userController from "../controllers/user.controller.js";
 import uploadImg from "../helper/uploadFile.js";
-import { isEmailExist, validateLogin } from "../validation/index.js";
+import { checkAuthentication } from "../middleware/index.js";
+import { isEmailExist } from "../validation/index.js";
 
 const router = express.Router();
+
+// Get Users
+router.get('/users', checkAuthentication, userController.index);
 
 // Create User
 router.post('/create', isEmailExist, uploadImg.single("image"), userController.create);
 
-// Get Users
-router.get('/users', userController.index);
-
 // Edit User
-router.put('/user/:id', userController.edit);
+router.put('/edit/:id', checkAuthentication, userController.edit);
 
 // Delete User
-router.delete('/user/:id', userController.delete);
+router.delete('/delete/:id', checkAuthentication, userController.delete);
 
 export default router;
 

@@ -1,19 +1,18 @@
 import express from 'express'
 import authController from '../controllers/auth.controller.js';
-import { FinalResult, validateLogin, isEmailExist } from '../validation/index.js';
 
 const router = express.Router();
 
 // Register
-router.post('/register', [isEmailExist, validateLogin, FinalResult], authController.register);
+router.post('/register', authController.register);
 
 // Login
-router.post('/login', validateLogin, authController.login);
+router.post('/login', authController.login);
 
 // Forgot Password
-router.post('/forget_password', authController.forget_password);
+router.post('/forgetPassword', authController.forgetPassword);
 
 // Reset Password
-router.get('/reset_password', authController.reset_password);
+router.get('/resetPassword', authController.resetPassword);
 
 export default router;

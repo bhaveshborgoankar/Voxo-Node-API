@@ -1,68 +1,34 @@
-import bcrypt from 'bcryptjs'
-import { of } from 'await-of';
+import bcrypt from 'bcryptjs';
 import randomstring from 'randomstring';
-import nodemailer from 'nodemailer';
-import { User } from '../connection/db.js';
-import { getToken } from '../middleware/jwt.middleware.js';
+import Jwt from 'jsonwebtoken';
+import { of } from 'await-of';
+import { User } from '../models/user.model.js';
+import { sendResetPasswordMail } from '../helper/sendMail.js';
+import { ReE, ReS } from '../helper/utils.js';
 
-// Send Mail
-const sendResetPasswordMail = async (name, email, random_string, subject) => {
-    try {
-        const transporter = nodemailer.createTransport({
-            host: "smtp.gmail.com",
-            port: 587,
-            auth: {
-                user: process.env.USER_EMAIL,
-                pass: process.env.USER_PASS
-            },
-        });
-        const mailOptions = {
-            from: process.env.USER_EMAIL,
-            to: email,
-            subject: subject,
-            text: '',
-            html: `<p>Hii ${name}, please copy this link and <a href="http://localhost:3000/reset_password?random_string=${random_string}">reset your password</a></p>`
-        };
-        await transporter.sendMail(mailOptions, function (err, info) {
-            if (err) {
-                console.log("Mail not sent!");
-            } else {
-                console.log({ info: info, message: "Successfully sent! Please check your mail." });
-            }
-        });
-    } catch (error) {
-        console.log({ message: error.message })
-    }
-}
 const authController = {
 
     // Login
     login: async (req, res, next) => {
         try {
             const { email, password } = req.body;
-            await of(User.find({ email: email }, function (err, user) {
-                if (err) {
-                    res.status(404).send("ERR");
-                } else {
-                    if (user.length >= 1) {
-                        bcrypt.compare(password, user[0].password, (err, isMatch) => {
-                            if (err) {
-                                res.status(404).json({ message: "Password Not Match", err: err });
-                            } else {
-                                if (isMatch) {
-                                    res.status(200).json({ message: "Successfully Login" });
-                                } else {
-                                    res.status(404).json({ message: "Password Not Match" });
-                                }
-                            }
-                        });
+            const [user] = await of(User.findOne({ email: email }))
+
+            if (user) {
+                bcrypt.compare(password, user.password, (error, isMatch) => {
+                    if (error) {
+                        return ReE(res, 404, { msg: "No User Found." })
                     } else {
-                        res.status(404).json({ message: "User is not found in records!" });
+                        if (isMatch) {
+                            var token = Jwt.sign({ _id: user._id }, process.env.JWT_SECRET_KEY, { expiresIn: "24h" });
+                            return ReS(res, 202, "Login Successfully", token)
+                        } else {
+                            return ReE(res, 404, "Authentication failed. Incorrect Email or Password")
+                        }
                     }
-                }
-            }))
-        }
-        catch (error) {
+                });
+            }
+        } catch (error) {
             console.log("error", error);
             res.status(404).send(error);
         }
@@ -70,69 +36,83 @@ const authController = {
 
     // Register
     register: async (req, res, next) => {
+
         try {
-            const { email, password, name, phone, confirm_password } = req.body;
-            if (!email || !password || !name || !phone || !confirm_password) {
-                res.status(404).json({ message: "All fields are required" });
-            } else {
-                if (password !== confirm_password) res.status(404).send({ message: "Password not match" });
-                else {
-                    const user = await of(User.create({
-                        email: email,
-                        password: password,
-                        name: name,
-                        phone: phone,
-                        token: getToken(email)
-                    }));
-                    res.status(201).json({ message: "Successfully Register", data: user, token: getToken(email) });
-                }
-            }
+
+            const { email, password, name, phone, country } = req.body;
+            const [user] = await of(User.create({
+                email: email,
+                password: password,
+                name: name,
+                phone: phone,
+                country: country
+            }));
+
+            return ReS(res, 201, "Successfully Register", user);
+
         } catch (error) {
             console.log("error", error);
-            res.status(404).json({ message: error });
+            return ReE(res, 404, error);
         }
     },
 
-    // ForgetPassword
-    forget_password: async (req, res, next) => {
+    // Forget Password
+    forgetPassword: async (req, res, next) => {
+
         try {
+
             const { email } = req.body;
             const [result] = await of(User.findOne({ email: email }));
+
             if (result !== null) {
-                const random_String = randomstring.generate();
-                let subject = "Forgot Password";
-                sendResetPasswordMail(result.name, result.email, random_String, subject);
-                const data = await of(User.updateOne({ email: email }, { $set: { random_string: random_String } }))
-                res.status(200).json({ message: "Successfully sent! Please check your mail.", data: data });
+                const OTP = randomstring.generate({
+                    length: 6,
+                    charset: 'numeric'
+                });
+
+                // Send Mail
+                sendResetPasswordMail(result.name, result.email, OTP, "Forgot Password");
+                await of(User.updateOne({ email: email }, { $set: { token: OTP } }))
+                return ReS(res, 200, { msg: "Successfully sent! Please check your mail." })
             } else {
-                res.status(400).json({ message: "User not found" });
+                return ReE(res, 400, { msg: "User not found" })
             }
-        } catch (err) {
-            console.log("Forget Password Error", err);
-            res.status(400).json({ message: err.message });
+
+        } catch (error) {
+            return ReE(res, 400, error.message)
         }
+
     },
 
     //Reset Password
-    reset_password: async (req, res, next) => {
+    resetPassword: async (req, res, next) => {
+
         try {
-            const random_string = req.query.random_string;
-            const tokenData = await of(User.findOne({ random_string: random_string }));
-            if (random_string !== '') {
-                if (tokenData[0] !== null) {
+
+            const Otp = req.query.token;
+            const [token, err] = await of(User.findOne({ token: Otp }));
+
+            if (Otp !== '') {
+
+                if (token !== null) {
+
                     const password = req.body.password;
-                    const newPassword = await of(bcrypt.hashSync(password, 8));
-                    const userData = await of(User.findByIdAndUpdate({ _id: tokenData[0]._id }, { $set: { password: newPassword[0], random_string: '' } }, { new: true }));
-                    res.status(200).json({ message: 'User password has been reset', data: userData });
+                    const [newPassword] = await of(bcrypt.hashSync(password, 8));
+                    const userData = await of(User.findByIdAndUpdate(
+                        { _id: token._id },
+                        { $set: { password: newPassword, token: '' } },
+                        { new: true }
+                    ));
+                    return ReS(res, 200, { msg: 'User password has been reset' });
                 }
                 else {
-                    res.status(400).json({ message: 'Link has been expired' });
+                    return ReE(res, 400, { msg: 'Link has been expired' });
                 }
             } else {
-                res.status(400).json({ message: 'Link has been expired' });
+                return ReE(res, 400, { msg: 'Link has been expired' });
             }
         } catch (error) {
-            res.status(400).json({ message: error.message });
+            return ReE(res, 400, error.message);
         }
     }
 }

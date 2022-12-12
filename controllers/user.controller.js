@@ -1,104 +1,117 @@
 import { of } from "await-of";
-import { User } from "../connection/db.js";
+import { ReE, ReS } from "../helper/utils.js";
+import { User } from "../models/user.model.js";
 
 const userController = {
 
     // Get User
     index: async (req, res, next) => {
+
         try {
-            const users = await of(User.find({}));
-            res.status(200).json({ data: users });
+
+            const [users, error] = await of(User.find({}));
+
+            if (users) {
+                return ReS(res, 200, 'Success', users)
+            } else {
+                return ReE(res, 404, error.message)
+            }
+
         } catch (error) {
             console.log("Error", error);
-            res.status(400).json({ message: error.message });
+            return ReE(res, 400, { msg: error.message })
         }
     },
 
     // Create User
     create: async (req, res, next) => {
+
         try {
+
             const { name, email, phone, password, confirm_password, country } = req.body;
             const image = req.file.filename;
-            if (!name || !email || !phone || !password || !confirm_password || !country) {
-                res.status(404).json({ message: "All fields are required" });
-            } else {
-                if (password !== confirm_password) res.status(404).send({ message: "Password not match" });
-                else {
-                    const user = await of(User.create({
-                        email: email,
-                        password: password,
-                        name: name,
-                        phone: phone,
-                        country: country,
-                        image: image,
-                        // if sir will say to add then i will add the below line
-                        // token: getToken(email)
-                    }))
-                    res.status(200).json({ message: "Successfully Register", data: user });
-                }
-            }
-        }
-        catch (error) {
-            res.status(400).json({ msg: error.message });
+
+            const user = await of(User.create({
+                email: email,
+                password: password,
+                name: name,
+                phone: phone,
+                country: country,
+                image: image,
+            }))
+            return ReS(res, 200, "Successfully Register", user);
+        } catch (error) {
+            return ReE(res, 400, { msg: error.message });
         };
     },
 
     // Edit User
     edit: async (req, res, next) => {
+
         try {
+
             const { id } = req.params;
             const { name, email, phone, is_active } = req.body;
-            await of(User.findOne({ _id: id }, function (err, data) {
-                if (err) {
-                    res.status(400).json({ message: err.message, data: "User is not exist" });
-                } else {
-                    var updateUser = {
-                        update_on: new Date(),
-                        is_deleted: false,
-                    };
-                    if (name) {
-                        updateUser.name = name
-                    };
-                    if (email) {
-                        updateUser.email = email
-                    };
-                    if (phone) {
-                        updateUser.phone = phone
-                    };
-                    if (is_active) {
-                        updateUser.is_active = is_active
-                    };
-                    User.findByIdAndUpdate({ _id: id }, { $set: updateUser }, { new: true }, function (err, result) {
-                        if (err) {
-                            res.status(400).json({ message: "Name is Required" });
-                        } else {
-                            res.status(200).json({ message: 'result', data: result });
-                        }
-                    });
+            const [user, error] = await of(User.find({ _id: id }));
+
+            if (error) {
+                return ReE(res, 400, { msg: error.message })
+            } else {
+
+                var updateUser = {
+                    update_on: new Date(),
+                    is_deleted: false,
+                };
+                if (name) {
+                    updateUser.name = name
+                };
+                if (email) {
+                    updateUser.email = email
+                };
+                if (phone) {
+                    updateUser.phone = phone
+                };
+                if (is_active) {
+                    updateUser.is_active = is_active
+                };
+
+                const [result, error] = await of(User.findByIdAndUpdate({ _id: id }, { $set: updateUser }, { new: true }));
+
+                if (!error) {
+                    return ReS(res, 200, "Successfully updated!", result);
                 }
-            }));
+            }
         } catch (error) {
-            res.status(400).json({ message: error.message });
+            return ReS(res, 400, { msg: error.message });
         }
     },
 
     // Delete User
     delete: async (req, res, next) => {
+
         try {
+
             const { id } = req.params;
+            const updateInformation = {
+                is_deleted: true
+            };
+
             if (id) {
-                User.findByIdAndDelete({ _id: id }, function (err, data) {
-                    if (err) {
-                        res.status(400).json({ message: "Please provide valid id" });
-                    } else {
-                        res.status(200).json({ message: 'User delete successfully' });
-                    }
-                });
+
+                const [result, error] = await of(User.updateOne({ _id: id }, { $set: updateInformation }));
+
+                if (error) {
+                    return ReE(res, 400, { msg: error.message });
+                } else {
+                    return ReS(res, 200, "Successfully deleted!");
+                }
+
             } else {
-                res.status(400).json({ message: 'Please provide ID' });
+                return ReE(res, 400, { msg: "Please provide valid ID" });
             }
+
         } catch (error) {
-            res.status(400).json({ message: error.message });
+            return ReE(res, 400, { msg: error.message });
         }
     }
 }

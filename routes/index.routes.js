@@ -6,12 +6,12 @@ import CategoryRoutes from './category.routes.js';
 const router = express.Router()
 
 // Auth
-router.use('/', AuthRoutes);
+router.use('/auth', AuthRoutes);
 
 // User_management
-router.use('/', UserRoutes);
+router.use('/user', UserRoutes);
 
 // Category
-router.use('/', CategoryRoutes)
+router.use('/category', CategoryRoutes)
 
 export default router;

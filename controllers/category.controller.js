@@ -1,5 +1,5 @@
 import { of } from "await-of";
-import { Category } from "../connection/db.js";
+import { Category } from "../models/category.modal.js";
 
 const categoryController = {
 
@@ -16,17 +16,19 @@ const categoryController = {
     // Create Category
     create: async (req, res, next) => {
         try {
-            const { type } = req.body;
-            const [user] = await of(Category.findOne({ type: type }));
-            if (!user) {
-                const category = await of(Category.create({
-                    type: type
-                }))
-                res.status(200).json({ msg: "Added Successfully", data: category });
-            } else {
-                res.status(200).send("Category is already Added")
-                // res.status(200).json({ msg: 'Category is already Added' });
-            }
+            const { name } = req.body;
+            console.log("name", name, "image", req)
+            // const image = req.file
+            // const [user] = await of(Category.findOne({ type: type }));
+            // if (!user) {
+            //     const category = await of(Category.create({
+            //         type: type
+            //     }))
+            //     res.status(200).json({ msg: "Added Successfully", data: category });
+            // } else {
+            //     res.status(200).send("Category is already Added")
+            //     // res.status(200).json({ msg: 'Category is already Added' });
+            // }
         } catch (error) {
             res.status(400).json({ msg: error.message });
         }

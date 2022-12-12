@@ -3,17 +3,43 @@ import bcrypt from 'bcryptjs';
 
 // User schema
 var userSchema = new mongoose.Schema({
-    name: { type: String, required: true },
-    email: { type: String, required: true, lowercase: true },
-    password: { type: String, required: true },
-    confirm_password: { type: String },
-    phone: { type: Number, required: true },
-    country: { type: String, required: true },
-    image: { type: String },
-    is_deleted: { type: Boolean, default: false },
-    is_active: { type: Boolean },
-    random_string: { type: String },
-    token: { type: String }
+    name: {
+        type: String,
+        required: true
+    },
+    email: {
+        type: String,
+        required: true,
+        lowercase: true
+    },
+    password: {
+        type: String,
+        required: true
+    },
+    confirm_password: {
+        type: String
+    },
+    phone: {
+        type: Number,
+        required: true
+    },
+    country: {
+        type: String,
+        required: true
+    },
+    image: {
+        type: String
+    },
+    token: {
+        type: Number
+    },
+    is_deleted: {
+        type: Boolean,
+        default: false
+    },
+    is_active: {
+        type: Boolean
+    },
 },
     {
         timestamps: {
@@ -36,5 +62,5 @@ userSchema.pre('save', async function (next) {
     }
 });
 
-const UserModal = mongoose.model('User', userSchema);
-export { UserModal }
+const User = mongoose.model('User', userSchema);
+export { User }

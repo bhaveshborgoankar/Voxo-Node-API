@@ -1,7 +1,21 @@
 import mongoose from "mongoose";
 
 var categorySchema = new mongoose.Schema({
-    type: { type: String, required: true }
+    name: {
+        type: String,
+        required: true
+    },
+    image: {
+        type: String,
+        // required: true
+    },
+    is_deleted: {
+        type: Boolean,
+        default: false
+    },
+    is_active: {
+        type: Boolean
+    },
 }, {
     timestamps: {
         createdAt: 'created_at',
@@ -9,5 +23,5 @@ var categorySchema = new mongoose.Schema({
     }
 });
 
-const CategoryModal = mongoose.model('Category', categorySchema);
-export { CategoryModal };
+const Category = mongoose.model('Category', categorySchema);
+export { Category };

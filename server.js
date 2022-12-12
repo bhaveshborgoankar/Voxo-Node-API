@@ -2,6 +2,7 @@
 import express from 'express';
 import server from 'http';
 import * as dotenv from 'dotenv';
+import multer from 'multer';
 import path from 'path';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
@@ -9,12 +10,19 @@ import session from 'express-session';
 import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from './swagger.json' assert { type: "json" };
 import routes from './routes/index.routes.js';
+import { connectDB } from './connection/db.js';
+
+const __dirname = path.resolve();
 
 var app = express();
-const __dirname = path.resolve();
 app.use(express.json());
+var upload = multer();
+
+// DOT env configure
 dotenv.config();
-const Port = process.env.APP_PORT || 3000;
+
+// Connect DB
+connectDB();
 
 /* Set headers */
 app.use(function (req, res, next) {
@@ -30,16 +38,16 @@ app.use(function (req, res, next) {
     res.setHeader("Access-Control-Allow-Credentials", true);
     next();
 });
+
 app.use(cookieParser());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(upload.array());
 app.use('/public', express.static(path.join(__dirname, '/public')));
-app.use(
-    session({ secret: "voxo-secret", resave: true, saveUninitialized: true })
-);
+app.use(session({ secret: "voxo-secret", resave: true, saveUninitialized: true }));
 
 // Routes
-app.use('/', routes);
+app.use('/api', routes);
 
 // Swagger UI
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
@@ -63,6 +71,6 @@ app.use((error, req, res, next) => {
 
 /* Bind server on default port of https */
 var Server = server.createServer(app);
-Server.listen(Port, function () {
+Server.listen(process.env.APP_PORT || 3000, function () {
     console.log('Server listening on port ' + process.env.PUBLIC_URL);
 });

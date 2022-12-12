@@ -1,21 +1,7 @@
-import mongoose from 'mongoose'
-import { CategoryModal } from '../models/category.modal.js';
-import { UserModal } from '../models/user.model.js';
+import mongoose from 'mongoose';
 
-const url = "mongodb://localhost:27017/voxoAPI";
-
-/* connect to MongoDB datastore */
-try {
-    mongoose.connect(url, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-    });
-    console.log("database connected");
-} catch (error) {
-    console.log(error);
+/* connect to MongoDB */
+export const connectDB = async () => {
+    await mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/voxoAPI');
+    console.log('MongoDb Connected');
 }
-
-const User = UserModal;
-const Category = CategoryModal
-
-export { User, Category }

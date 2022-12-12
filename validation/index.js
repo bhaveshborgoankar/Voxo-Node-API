@@ -1,6 +1,6 @@
 import { of } from 'await-of';
 import { body, validationResult } from 'express-validator';
-import { User } from '../connection/db.js';
+import { User } from '../models/user.model.js';
 
 export const validateLogin = [
     body('email').isEmail(),
@@ -15,19 +15,9 @@ export const validateLogin = [
     }
 ]
 
-const FinalResult = async (req, res, next) => {
-    // Finds the validation errors in this request and wraps them in an object with handy functions
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(404).json({ message: errors });
-    } else {
-        next();
-    }
-
-}
-
 // Check weather email is exist or not.
 const isEmailExist = async (req, res, next) => {
+    console.log("req, res, next", req, res, next);
     await of(User.findOne({ email: req.body.email }, function (err, user) {
         if (err) {
             res.status(404).send("ERR");
@@ -42,4 +32,4 @@ const isEmailExist = async (req, res, next) => {
     }));
 }
 
-export { FinalResult, isEmailExist };
+export { isEmailExist };

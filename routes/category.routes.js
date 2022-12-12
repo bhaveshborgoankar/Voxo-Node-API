@@ -1,18 +1,20 @@
 import express from "express";
+import uploadImg from "../helper/uploadFile.js";
 import categoryController from "../controllers/category.controller.js";
+import { checkAuthentication } from '../middleware/index.js'
 
 const router = express.Router();
 
 // Create
-router.post('/create_category', categoryController.create);
+router.post('/create', checkAuthentication, uploadImg.single("image"), categoryController.create);
 
 // Get Category
-router.get('/get_category', categoryController.index);
+router.get('/get', categoryController.index);
 
 // Edit
-router.put('/edit_category', categoryController.edit);
+router.put('/edit/:id', categoryController.edit);
 
 // Delete
-router.delete('/delete_category/:id', categoryController.delete);
+router.delete('/delete/:id', categoryController.delete);
 
 export default router;
