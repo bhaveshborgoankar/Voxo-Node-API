@@ -12,11 +12,14 @@ import swaggerDocument from './swagger.json' assert { type: "json" };
 import routes from './routes/index.routes.js';
 import { connectDB } from './connection/db.js';
 
-const __dirname = path.resolve();
-
 var app = express();
-app.use(express.json());
 var upload = multer();
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+
+const __dirname = path.resolve();
 
 // DOT env configure
 dotenv.config();
@@ -39,12 +42,11 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.use(cookieParser());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
 app.use(upload.array());
-app.use('/public', express.static(path.join(__dirname, '/public')));
+app.use(cookieParser());
+
 app.use(session({ secret: "voxo-secret", resave: true, saveUninitialized: true }));
+app.use('/public', express.static(path.join(__dirname, '/public')));
 
 // Routes
 app.use('/api', routes);

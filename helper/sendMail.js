@@ -27,6 +27,6 @@ export const sendResetPasswordMail = async (name, email, OTP, subject) => {
             }
         });
     } catch (error) {
-        console.log({ message: error.message })
+        console.log({ message: error.message });
     }
 }

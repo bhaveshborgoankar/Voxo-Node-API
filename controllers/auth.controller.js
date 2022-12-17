@@ -10,27 +10,33 @@ const authController = {
 
     // Login
     login: async (req, res, next) => {
+
         try {
+
             const { email, password } = req.body;
             const [user] = await of(User.findOne({ email: email }))
 
-            if (user) {
+            if (user !== null) {
                 bcrypt.compare(password, user.password, (error, isMatch) => {
+
                     if (error) {
                         return ReE(res, 404, { msg: "No User Found." })
                     } else {
                         if (isMatch) {
                             var token = Jwt.sign({ _id: user._id }, process.env.JWT_SECRET_KEY, { expiresIn: "24h" });
-                            return ReS(res, 202, "Login Successfully", token)
+                            return ReS(res, 202, { msg: "Login Successfully", token: token })
                         } else {
                             return ReE(res, 404, "Authentication failed. Incorrect Email or Password")
                         }
                     }
                 });
+            } else {
+                return ReE(res, 404, "Authentication failed. Incorrect Email or Password")
             }
+
         } catch (error) {
             console.log("error", error);
-            res.status(404).send(error);
+            ReE(res, 404, { msg: error.message });
         }
     },
 
@@ -98,7 +104,7 @@ const authController = {
 
                     const password = req.body.password;
                     const [newPassword] = await of(bcrypt.hashSync(password, 8));
-                    const userData = await of(User.findByIdAndUpdate(
+                    const user = await of(User.findByIdAndUpdate(
                         { _id: token._id },
                         { $set: { password: newPassword, token: '' } },
                         { new: true }

@@ -1,86 +1,103 @@
 import { of } from "await-of";
 import { Category } from "../models/category.modal.js";
+import { ReE, ReS } from '../helper/utils.js';
 
 const categoryController = {
 
     // Get Category
     index: async (req, res, next) => {
+
         try {
-            const category = await of(Category.find({}));
-            res.status(200).json({ msg: "Successfully", data: category });
+            const [category] = await of(Category.find({}));
+            return ReS(res, 200, "Successfully", category);
+
         } catch (error) {
-            res.status(400).json({ msg: error.message });
+            return ReE(res, 400, error.message);
         }
     },
 
     // Create Category
     create: async (req, res, next) => {
+
         try {
+
             const { name } = req.body;
-            console.log("name", name, "image", req)
-            // const image = req.file
-            // const [user] = await of(Category.findOne({ type: type }));
-            // if (!user) {
-            //     const category = await of(Category.create({
-            //         type: type
-            //     }))
-            //     res.status(200).json({ msg: "Added Successfully", data: category });
-            // } else {
-            //     res.status(200).send("Category is already Added")
-            //     // res.status(200).json({ msg: 'Category is already Added' });
-            // }
+            const [user] = await of(Category.findOne({ name: name }));
+
+            if (user === null) {
+
+                const category = await of(Category.create({
+                    name: name
+                }));
+                return ReS(res, 200, "Successfully added", category);
+
+            } else {
+                return ReE(res, 400, { msg: "Category is already Added" });
+            };
+
         } catch (error) {
-            res.status(400).json({ msg: error.message });
-        }
+            ReE(res, 400, { msg: error.message });
+        };
     },
 
     // Edit Category
     edit: async (req, res, next) => {
+
         try {
-            const { id } = req.query;
-            const { type } = req.body;
+
+            const { id } = req.params;
+            const { name } = req.body;
             const [category] = await of(Category.findOne({ _id: id }));
+
             if (category) {
+
                 var updateCategory = {
-                    type: type
+                    name: name
+                };
+                const [update, error] = await of(Category.findByIdAndUpdate({ _id: id }, { $set: updateCategory }, { new: true }));
+
+                if (error) {
+                    return ReE(res, 400, { msg: error.message });
+                } else {
+                    return ReS(res, 200, "Successfully update", update);
                 }
-                await of(Category.findByIdAndUpdate({ _id: id }, { $set: updateCategory }, { new: true }, function (err, updated_category) {
-                    if (err) {
-                        res.status(200).json({ msg: err.message });
-                    } else {
-                        res.status(200).json({ msg: 'Updated Successfully', data: updated_category });
-                    }
-                }))
+
             } else {
-                res.status(200).send("Id is not matched")
-                // res.status(200).json({ msg: 'Id is not matched' });
-            }
+                return ReE(res, 400, { msg: "Id is not matched" });
+            };
+
         } catch (error) {
-            res.status(200).json({ msg: error.message });
-        }
+            return ReE(res, 400, { msg: error.message });
+        };
     },
 
     // Delete Category
     delete: async (req, res, next) => {
+
         try {
+
             const { id } = req.params;
+
             if (id) {
-                await of(Category.findByIdAndDelete({ _id: id }, function (err, data) {
-                    if (err) {
-                        res.status(200).json({ msg: err.message });
-                    } else {
-                        res.status(200).send("Category delete successfully")
-                        // res.status(200).json({ data: "Category delete successfully" });
-                    }
-                }))
+                const updateInformation = {
+                    is_deleted: true
+                };
+                const [result, error] = await of(User.updateOne({ _id: id }, { $set: updateInformation }));
+
+                if (error) {
+                    return ReE(res, 400, { msg: error.message });
+                } else {
+                    return ReS(res, 200, { msg: "Category delete successfully" });
+                };
+
             } else {
-                res.status(200).send("Please provide proper Id");
-                // res.status(400).json({ msg: "Please provide proper Id" });
-            }
-        } catch (err) {
-            res.status(400).json({ msg: err.message });
-        }
+                return ReE(res, 200, { msg: "Please provide proper Id" });
+            };
+
+        } catch (error) {
+            return ReE(res, 400, { msg: error.message });
+        };
     }
-}
+};
 
 export default categoryController;

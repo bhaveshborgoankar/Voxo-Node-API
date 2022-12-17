@@ -13,6 +13,9 @@ router.get('/users', checkAuthentication, userController.index);
 router.post('/create', isEmailExist, uploadImg.single("image"), userController.create);
 
 // Edit User
+// router.get('/:id', checkAuthentication, userController.single);
+
+// Edit User
 router.put('/edit/:id', checkAuthentication, userController.edit);
 
 // Delete User
