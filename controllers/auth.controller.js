@@ -90,7 +90,33 @@ const authController = {
 
     },
 
-    //Reset Password
+    // Verify OTP
+    verifyOTP: async (req, res, next) => {
+
+        try {
+
+            const { otp } = req.body;
+
+            if (otp) {
+
+                const [token, error] = await of(User.findOne({ token: otp }));
+
+                if (error) {
+                    return ReE(res, 400, { msg: error.message });
+                } else {
+                    return ReS(res, 200, { msg: "Valid Token" });
+                }
+
+            } else {
+                return ReE(res, 400, { msg: "Invalid OTP" });
+            }
+
+        } catch (error) {
+            return ReE(res, 400, { msg: error.message });
+        }
+    },
+
+    // Reset Password
     resetPassword: async (req, res, next) => {
 
         try {
@@ -112,10 +138,10 @@ const authController = {
                     return ReS(res, 200, { msg: 'User password has been reset' });
                 }
                 else {
-                    return ReE(res, 400, { msg: 'Link has been expired' });
+                    return ReE(res, 400, { msg: 'Invalid OTP' });
                 }
             } else {
-                return ReE(res, 400, { msg: 'Link has been expired' });
+                return ReE(res, 400, { msg: 'Invalid OTP' });
             }
         } catch (error) {
             return ReE(res, 400, error.message);

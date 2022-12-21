@@ -16,7 +16,7 @@ router.post('/create', isEmailExist, uploadImg.single("image"), userController.c
 router.get('/:id', checkAuthentication, userController.single);
 
 // Edit User
-router.put('/edit/:id', checkAuthentication, userController.edit);
+router.put('/edit/:id', userController.edit);
 
 // Delete User
 router.delete('/delete/:id', checkAuthentication, userController.delete);

@@ -23,6 +23,25 @@ const userController = {
         }
     },
 
+    // Get Single User
+    single: async (req, res, next) => {
+
+        try {
+
+            const { id } = req.params;
+            const [user, err] = await of(User.findById({ _id: id }))
+
+            if (err) {
+                return ReE(res, 400, { msg: 'Id is not match with our Database' })
+            } else {
+                return ReS(res, 200, { msg: 'user', data: user })
+            }
+
+        } catch (error) {
+            return ReE(res, 404, { msg: error.message })
+        }
+    },
+
     // Create User
     create: async (req, res, next) => {
 
@@ -45,24 +64,6 @@ const userController = {
         };
     },
 
-    single: async (req, res, next) => {
-
-        try {
-
-            const { id } = req.params;
-            const [user, err] = await of(User.findById({ _id: id }))
-
-            if (err) {
-                return ReE(res, 400, { msg: 'Id is not match with our Database' })
-            } else {
-                return ReS(res, 200, { msg: 'user', data: user })
-            }
-
-        } catch (error) {
-            return ReE(res, 404, { msg: error.message })
-        }
-    },
-
     // Edit User
     edit: async (req, res, next) => {
 
@@ -75,7 +76,6 @@ const userController = {
             if (error) {
                 return ReE(res, 400, { msg: error.message })
             } else {
-
                 var updateUser = {
                     update_on: new Date(),
                     is_deleted: false,
@@ -99,8 +99,9 @@ const userController = {
                     return ReS(res, 200, "Successfully updated!", result);
                 }
             }
+
         } catch (error) {
-            return ReS(res, 400, { msg: error.message });
+            return ReS(res, 400, { msg: error.message, data: "Mayur" });
         }
     },
 

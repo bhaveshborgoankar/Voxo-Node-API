@@ -13,7 +13,32 @@ import routes from './routes/index.routes.js';
 import { connectDB } from './connection/db.js';
 
 var app = express();
-var upload = multer();
+var upload = multer({ dest: 'uploads/' });
+
+// app.post('/profile', upload.single('avatar'), function (req, res, next) {
+//     try {
+//         console.log("🚀 ~ file: server.js:19 ~ res", res)
+//         console.log("🚀 ~ file: server.js:19 ~ req", req)
+//         res.status(200).send('Done')
+//     } catch (err) {
+//         console.log("🚀 ~ file: server.js:24 ~ err", err)
+//         res.status(400).send('fail')
+//     }
+// })
+app.post('/stats', upload.single('uploaded_file'), function (req, res) {
+    // req.file is the name of your file in the form above, here 'uploaded_file'
+    // req.body will hold the text fields, if there were any 
+    try {
+        console.log("🚀 ~ file: server.js:19 ~ res", res)
+        console.log("🚀 ~ file: server.js:19 ~ req", req)
+        console.log(req.body)
+        res.status(200).send('Done')
+    } catch (err) {
+        console.log("🚀 ~ file: server.js:24 ~ err", err)
+        console.log(req.file, req.body)
+        res.status(400).send('fail')
+    }
+});
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
