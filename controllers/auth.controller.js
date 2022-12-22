@@ -24,14 +24,14 @@ const authController = {
                     } else {
                         if (isMatch) {
                             var token = Jwt.sign({ _id: user._id }, process.env.JWT_SECRET_KEY, { expiresIn: "24h" });
-                            return ReS(res, 202, { msg: "Login Successfully", token: token })
+                            return ReS(res, 200, { msg: "Login Successfully", token: token })
                         } else {
-                            return ReE(res, 404, "Authentication failed. Incorrect Email or Password")
+                            return ReE(res, 404, { msg: "Authentication failed. Incorrect Email or Password" })
                         }
                     }
                 });
             } else {
-                return ReE(res, 404, "Authentication failed. Incorrect Email or Password")
+                return ReE(res, 404, { msg: "Authentication failed. Incorrect Email or Password" })
             }
 
         } catch (error) {
@@ -95,20 +95,26 @@ const authController = {
 
         try {
 
-            const { otp } = req.body;
+            const { otp, email } = req.body;
 
-            if (otp) {
+            if (email) {
 
-                const [token, error] = await of(User.findOne({ token: otp }));
+                const [isUser] = await of(User.findOne({ email: email }));
 
-                if (error) {
-                    return ReE(res, 400, { msg: error.message });
+                if (isUser !== null) {
+
+                    if (otp && isUser?.token == otp) {
+                        return ReS(res, 200, { msg: "Valid OTP" });
+                    } else {
+                        return ReS(res, 400, { msg: "Invalid OTP" });
+                    }
+
                 } else {
-                    return ReS(res, 200, { msg: "Valid Token" });
+                    return ReE(res, 400, { msg: 'User not found' });
                 }
 
             } else {
-                return ReE(res, 400, { msg: "Invalid OTP" });
+                return ReE(res, 400, { msg: 'User not found' });
             }
 
         } catch (error) {
@@ -121,28 +127,30 @@ const authController = {
 
         try {
 
-            const Otp = req.query.token;
-            const [token, err] = await of(User.findOne({ token: Otp }));
+            const { email, password, confirm_password, otp } = req.body;
+            const [user] = await of(User.findOne({ email: email }));
 
-            if (Otp !== '') {
+            if (user !== null) {
+                console.log("user.token, otp", user.token, otp)
 
-                if (token !== null) {
-
-                    const password = req.body.password;
+                if (user.token == otp) {
                     const [newPassword] = await of(bcrypt.hashSync(password, 8));
-                    const user = await of(User.findByIdAndUpdate(
-                        { _id: token._id },
+                    const [updatePassword] = await of(User.findByIdAndUpdate(
+                        { _id: user._id },
                         { $set: { password: newPassword, token: '' } },
                         { new: true }
                     ));
+
                     return ReS(res, 200, { msg: 'User password has been reset' });
+
+                } else {
+                    return ReE(res, 400, { msg: "Email and OTP not found" })
                 }
-                else {
-                    return ReE(res, 400, { msg: 'Invalid OTP' });
-                }
+
             } else {
-                return ReE(res, 400, { msg: 'Invalid OTP' });
+                return ReE(res, 401, { msg: "User not found" });
             }
+
         } catch (error) {
             return ReE(res, 400, error.message);
         }

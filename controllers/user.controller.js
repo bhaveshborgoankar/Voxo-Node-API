@@ -48,7 +48,7 @@ const userController = {
         try {
 
             const { name, email, phone, password, confirm_password, country } = req.body;
-            const image = req.file.filename;
+            // const image = req.file.filename;
 
             const user = await of(User.create({
                 email: email,
@@ -56,7 +56,7 @@ const userController = {
                 name: name,
                 phone: phone,
                 country: country,
-                image: image,
+                // image: image,
             }))
             return ReS(res, 200, "Successfully Register", user);
         } catch (error) {

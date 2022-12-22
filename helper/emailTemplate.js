@@ -27,9 +27,8 @@ export const emailTamplate = (name, token) => {
                                             password has been generated for you. To reset your password, click the
                                             following link and follow the instructions.
                                         </p>
-                                        <a href=${process.env.PUBLIC_URL}api/auth/resetPassword?token=${token}
-                                            style="background:#20e277;text-decoration:none !important; font-weight:500; margin-top:35px; color:#fff;text-transform:uppercase; font-size:14px;padding:10px 24px;display:inline-block;border-radius:50px;">Reset
-                                            Password</a>
+                                        <span
+                                            style="background:#20e277;text-decoration:none !important; font-weight:500; margin-top:35px; color:#fff;text-transform:uppercase; font-size:14px;padding:10px 24px;display:inline-block;border-radius:50px;">${token}</span>
                                     </td>
                                 </tr>
                                 <tr>
