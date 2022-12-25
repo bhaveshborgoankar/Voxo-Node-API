@@ -10,13 +10,13 @@ const router = express.Router();
 router.get('/users', checkAuthentication, userController.index);
 
 // Create User
-router.post('/create', isEmailExist, uploadImg.single("image"), userController.create);
+router.post('/create', isEmailExist, uploadImg.single("image"), userController.store);
 
 // Edit User
-router.get('/:id', checkAuthentication, userController.single);
+router.get('/:id', checkAuthentication, userController.edit);
 
 // Edit User
-router.put('/edit/:id', userController.edit);
+router.put('/edit/:id', userController.update);
 
 // Delete User
 router.delete('/delete/:id', checkAuthentication, userController.delete);

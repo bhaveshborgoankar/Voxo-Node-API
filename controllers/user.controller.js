@@ -23,27 +23,8 @@ const userController = {
         }
     },
 
-    // Get Single User
-    single: async (req, res, next) => {
-
-        try {
-
-            const { id } = req.params;
-            const [user, err] = await of(User.findById({ _id: id }))
-
-            if (err) {
-                return ReE(res, 400, { msg: 'Id is not match with our Database' })
-            } else {
-                return ReS(res, 200, { msg: 'user', data: user })
-            }
-
-        } catch (error) {
-            return ReE(res, 404, { msg: error.message })
-        }
-    },
-
-    // Create User
-    create: async (req, res, next) => {
+    // Store User
+    store: async (req, res, next) => {
 
         try {
 
@@ -66,6 +47,25 @@ const userController = {
 
     // Edit User
     edit: async (req, res, next) => {
+
+        try {
+
+            const { id } = req.params;
+            const [user, err] = await of(User.findById({ _id: id }))
+
+            if (err) {
+                return ReE(res, 400, { msg: 'Id is not match with our Database' })
+            } else {
+                return ReS(res, 200, { msg: 'user', data: user })
+            }
+
+        } catch (error) {
+            return ReE(res, 404, { msg: error.message })
+        }
+    },
+
+    // Update User
+    update: async (req, res, next) => {
 
         try {
 

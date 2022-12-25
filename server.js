@@ -54,7 +54,7 @@ connectDB();
 
 /* Set headers */
 app.use(function (req, res, next) {
-    res.setHeader("Access-Control-Allow-Origin", "http://localhost:4000/");
+    res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader(
         "Access-Control-Allow-Methods",
         "GET, POST, OPTIONS, PUT, PATCH, DELETE"
