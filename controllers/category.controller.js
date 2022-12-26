@@ -5,35 +5,43 @@ import { ReE, ReS } from '../helper/utils.js';
 const categoryController = {
 
     // Get Category
-    index: async (req, res, next) => {
+    index: async (req, res) => {
 
         try {
-            const [category] = await of(Category.find({}));
-            return ReS(res, 200, "Successfully", category);
+
+            const [category, categoryError] = await of(Category.find({ is_deleted: false }));
+
+            if (categoryError) throw categoryError;
+
+            return ReS(res, 200, "Get all categories successfully", category);
 
         } catch (error) {
             return ReE(res, 400, error.message);
         }
     },
 
-    // Create Category
-    create: async (req, res, next) => {
+    // Store Category
+    store: async (req, res) => {
 
         try {
 
             const { name } = req.body;
-            const [user] = await of(Category.findOne({ name: name }));
+            const [user, userError] = await of(Category.findOne({ name: name }));
 
-            if (user === null) {
+            if (userError) throw userError;
+
+            if (!user) {
 
                 const category = await of(Category.create({
-                    name: name
+                    name: name,
+                    // image: image
                 }));
-                return ReS(res, 200, "Successfully added", category);
+
+                return ReS(res, 200, "Category created successfully", category);
 
             } else {
-                return ReE(res, 400, { msg: "Category is already Added" });
-            };
+                return ReE(res, 400, { msg: "Category is already exist" });
+            }
 
         } catch (error) {
             ReE(res, 400, { msg: error.message });
@@ -41,30 +49,56 @@ const categoryController = {
     },
 
     // Edit Category
-    edit: async (req, res, next) => {
+    edit: async (req, res) => {
+
+        try {
+
+            const { id } = req.params;
+
+            if (!id) {
+                return ReE(res, 400, { msg: "Category id is required" });
+            }
+
+            const [category, categoryError] = await of(Category.findById({ _id: id }));
+
+            if (categoryError) throw categoryError;
+
+            return ReS(res, 200, { msg: 'Get category by Id successfully', data: category });
+
+        } catch (error) {
+            return ReE(res, 404, { msg: error.message });
+        }
+    },
+
+    // Update Category
+    update: async (req, res) => {
 
         try {
 
             const { id } = req.params;
             const { name } = req.body;
-            const [category] = await of(Category.findOne({ _id: id }));
 
-            if (category) {
+            if (!id) {
+                return ReE(res, 400, { msg: "Category id is required" });
+            }
 
-                var updateCategory = {
-                    name: name
-                };
-                const [update, error] = await of(Category.findByIdAndUpdate({ _id: id }, { $set: updateCategory }, { new: true }));
+            const [category, categoryError] = await of(Category.findOne({ _id: id }));
 
-                if (error) {
-                    return ReE(res, 400, { msg: error.message });
-                } else {
-                    return ReS(res, 200, "Successfully update", update);
-                }
+            if (categoryError) throw categoryError;
 
-            } else {
-                return ReE(res, 400, { msg: "Id is not matched" });
+            var updateCategory = {
+                name: name,
+                // image: image
             };
+
+            const [result, resultError] = await of(Category.findByIdAndUpdate(
+                { _id: id },
+                { $set: updateCategory },
+                { new: true }));
+
+            if (resultError) throw resultError;
+
+            return ReS(res, 200, "Category updated successfully", result);
 
         } catch (error) {
             return ReE(res, 400, { msg: error.message });
@@ -72,32 +106,32 @@ const categoryController = {
     },
 
     // Delete Category
-    delete: async (req, res, next) => {
+    delete: async (req, res) => {
 
         try {
 
             const { id } = req.params;
 
-            if (id) {
-                const updateInformation = {
-                    is_deleted: true
-                };
-                const [result, error] = await of(User.updateOne({ _id: id }, { $set: updateInformation }));
+            if (!id) {
+                return ReE(res, 400, { msg: "Category id is required" });
+            }
 
-                if (error) {
-                    return ReE(res, 400, { msg: error.message });
-                } else {
-                    return ReS(res, 200, { msg: "Category delete successfully" });
-                };
+            const [result, resultError] = await of(Category.findByIdAndUpdate(
+                { _id: id },
+                { $set: { is_deleted: true } },
+                { new: true })
+            );
 
-            } else {
-                return ReE(res, 200, { msg: "Please provide proper Id" });
-            };
+            if (resultError) throw resultError
+
+            return ReS(res, 200, { msg: "Category delete successfully" });
 
         } catch (error) {
             return ReE(res, 400, { msg: error.message });
-        };
+        }
+
     }
+
 };
 
 export default categoryController;

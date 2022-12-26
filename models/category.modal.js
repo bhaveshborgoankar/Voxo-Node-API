@@ -7,7 +7,10 @@ var categorySchema = new mongoose.Schema({
     },
     image: {
         type: String,
-        // required: true
+    },
+    parent_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'categories'
     },
     is_deleted: {
         type: Boolean,

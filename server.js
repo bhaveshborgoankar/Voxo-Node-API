@@ -2,8 +2,8 @@
 import express from 'express';
 import server from 'http';
 import * as dotenv from 'dotenv';
-import multer from 'multer';
 import path from 'path';
+import fileUpload from 'express-fileupload';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
@@ -13,44 +13,21 @@ import routes from './routes/index.routes.js';
 import { connectDB } from './connection/db.js';
 
 var app = express();
-var upload = multer({ dest: 'uploads/' });
-
-// app.post('/profile', upload.single('avatar'), function (req, res, next) {
-//     try {
-//         console.log("🚀 ~ file: server.js:19 ~ res", res)
-//         console.log("🚀 ~ file: server.js:19 ~ req", req)
-//         res.status(200).send('Done')
-//     } catch (err) {
-//         console.log("🚀 ~ file: server.js:24 ~ err", err)
-//         res.status(400).send('fail')
-//     }
-// })
-app.post('/stats', upload.single('uploaded_file'), function (req, res) {
-    // req.file is the name of your file in the form above, here 'uploaded_file'
-    // req.body will hold the text fields, if there were any 
-    try {
-        console.log("🚀 ~ file: server.js:19 ~ res", res)
-        console.log("🚀 ~ file: server.js:19 ~ req", req)
-        console.log(req.body)
-        res.status(200).send('Done')
-    } catch (err) {
-        console.log("🚀 ~ file: server.js:24 ~ err", err)
-        console.log(req.file, req.body)
-        res.status(400).send('fail')
-    }
-});
+const __dirname = path.resolve();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
-const __dirname = path.resolve();
+// app.use('/form', express.static(__dirname + '/index.html'));
 
 // DOT env configure
 dotenv.config();
 
 // Connect DB
 connectDB();
+
+app.use(fileUpload());
 
 /* Set headers */
 app.use(function (req, res, next) {
@@ -67,11 +44,9 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.use(upload.array());
 app.use(cookieParser());
 
 app.use(session({ secret: "voxo-secret", resave: true, saveUninitialized: true }));
-app.use('/public', express.static(path.join(__dirname, '/public')));
 
 // Routes
 app.use('/api', routes);
@@ -91,7 +66,7 @@ app.use((error, req, res, next) => {
     res.status(error.status || 500);
     res.json({
         error: {
-            message: error.message
+            msg: error.message
         }
     });
 });

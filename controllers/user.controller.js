@@ -5,77 +5,81 @@ import { User } from "../models/user.model.js";
 const userController = {
 
     // Get User
-    index: async (req, res, next) => {
+    index: async (req, res) => {
 
         try {
 
-            const [users, error] = await of(User.find({}));
+            const [users, userError] = await of(User.find({ is_deleted: false }));
 
-            if (users) {
-                return ReS(res, 200, 'Success', users)
-            } else {
-                return ReE(res, 404, error.message)
-            }
+            if (userError) throw userError;
+
+            return ReS(res, 200, 'Get all users successfully', users);
 
         } catch (error) {
-            console.log("Error", error);
             return ReE(res, 400, { msg: error.message })
         }
     },
 
     // Store User
-    store: async (req, res, next) => {
+    store: async (req, res) => {
 
         try {
 
-            const { name, email, phone, password, confirm_password, country } = req.body;
-            // const image = req.file.filename;
+            const { name, email, phone, password } = req.body;
 
             const user = await of(User.create({
                 email: email,
                 password: password,
                 name: name,
-                phone: phone,
-                country: country,
-                // image: image,
+                phone: phone
             }))
-            return ReS(res, 200, "Successfully Register", user);
+            return ReS(res, 200, "User create successfully", user);
+
         } catch (error) {
             return ReE(res, 400, { msg: error.message });
         };
     },
 
     // Edit User
-    edit: async (req, res, next) => {
+    edit: async (req, res) => {
 
         try {
 
             const { id } = req.params;
-            const [user, err] = await of(User.findById({ _id: id }))
 
-            if (err) {
-                return ReE(res, 400, { msg: 'Id is not match with our Database' })
-            } else {
-                return ReS(res, 200, { msg: 'user', data: user })
+            if (!id) {
+                return ReE(res, 400, { msg: "User id is required" });
             }
 
+            const [user, userError] = await of(User.findById({ _id: id }));
+
+            if (userError) throw userError;
+
+            return ReS(res, 200, { msg: 'Get user by Id successfully', data: user });
+
         } catch (error) {
-            return ReE(res, 404, { msg: error.message })
+            return ReE(res, 404, { msg: error.message });
         }
     },
 
     // Update User
-    update: async (req, res, next) => {
+    update: async (req, res) => {
 
         try {
 
             const { id } = req.params;
-            const { name, email, phone, is_active } = req.body;
-            const [user, error] = await of(User.find({ _id: id }));
 
-            if (error) {
-                return ReE(res, 400, { msg: error.message })
-            } else {
+            if (!id) {
+                return ReE(res, 400, { msg: "User id is required" });
+            }
+
+            const { name, email, phone, is_active } = req.body;
+            const [user, userError] = await of(User.find({ _id: id }));
+
+            if (userError) throw userError;
+
+            if (user) {
+
                 var updateUser = {
                     update_on: new Date(),
                     is_deleted: false,
@@ -92,41 +96,38 @@ const userController = {
                 if (is_active) {
                     updateUser.is_active = is_active
                 };
+            }
 
-                const [result, error] = await of(User.findByIdAndUpdate({ _id: id }, { $set: updateUser }, { new: true }));
+            const [result, resultError] = await of(User.findByIdAndUpdate({ _id: id }, { $set: updateUser }, { new: true }));
 
-                if (!error) {
-                    return ReS(res, 200, "Successfully updated!", result);
-                }
+            if (resultError) throw resultError;
+
+            if (result) {
+                return ReS(res, 200, "User update Successfully!", result);
             }
 
         } catch (error) {
-            return ReS(res, 400, { msg: error.message, data: "Mayur" });
+            return ReS(res, 400, { msg: error.message, });
         }
     },
 
     // Delete User
-    delete: async (req, res, next) => {
+    delete: async (req, res) => {
 
         try {
 
             const { id } = req.params;
-            const updateInformation = {
-                is_deleted: true
-            };
 
-            if (id) {
+            if (!id) {
+                return ReE(res, 400, { msg: "User id is required" });
+            }
 
-                const [result, error] = await of(User.updateOne({ _id: id }, { $set: updateInformation }));
+            const [result, resultError] = await of(User.updateOne({ _id: id }, { $set: { is_deleted: true } }));
 
-                if (error) {
-                    return ReE(res, 400, { msg: error.message });
-                } else {
-                    return ReS(res, 200, "Successfully deleted!");
-                }
+            if (resultError) throw resultError;
 
-            } else {
-                return ReE(res, 400, { msg: "Please provide valid ID" });
+            if (result) {
+                return ReS(res, 200, "User delete successfully!");
             }
 
         } catch (error) {

@@ -1,6 +1,5 @@
 import express from "express";
 import userController from "../controllers/user.controller.js";
-import uploadImg from "../helper/uploadFile.js";
 import { checkAuthentication } from "../middleware/index.js";
 import { isEmailExist } from "../validation/index.js";
 
@@ -10,7 +9,7 @@ const router = express.Router();
 router.get('/users', checkAuthentication, userController.index);
 
 // Create User
-router.post('/create', isEmailExist, uploadImg.single("image"), userController.store);
+router.post('/create', isEmailExist, userController.store);
 
 // Edit User
 router.get('/:id', checkAuthentication, userController.edit);

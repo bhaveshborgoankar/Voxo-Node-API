@@ -23,10 +23,10 @@ export const sendResetPasswordMail = async (name, email, OTP, subject) => {
             if (err) {
                 console.log("Mail not sent!");
             } else {
-                console.log({ info: info, message: "Successfully sent! Please check your mail." });
+                console.log({ info: info, msg: "Successfully sent! Please check your mail." });
             }
         });
     } catch (error) {
-        console.log({ message: error.message });
+        console.log({ msg: error.message });
     }
 }

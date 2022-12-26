@@ -9,39 +9,43 @@ import { ReE, ReS } from '../helper/utils.js';
 const authController = {
 
     // Login
-    login: async (req, res, next) => {
+    login: async (req, res) => {
 
         try {
 
             const { email, password } = req.body;
-            const [user] = await of(User.findOne({ email: email }))
+            const [user, userError] = await of(User.findOne({ email: email }))
 
-            if (user !== null) {
+            if (userError) throw userError;
+
+            if (user) {
+
                 bcrypt.compare(password, user.password, (error, isMatch) => {
 
                     if (error) {
-                        return ReE(res, 404, { msg: "No User Found." })
+                        return ReE(res, 404, { msg: "No User Found." });
                     } else {
                         if (isMatch) {
-                            var token = Jwt.sign({ _id: user._id }, process.env.JWT_SECRET_KEY, { expiresIn: "24h" });
-                            return ReS(res, 200, { msg: "Login Successfully", token: token })
+
+                            var token = Jwt.sign({ _id: user._id }, process.env.JWT_SECRET_KEY, { expiresIn: "48h" });
+                            return ReS(res, 200, { msg: "Login Successfully", token: token });
+
                         } else {
-                            return ReE(res, 404, { msg: "Authentication failed. Incorrect Email or Password" })
+                            return ReE(res, 404, { msg: "Authentication failed. Incorrect Email or Password" });
                         }
                     }
                 });
             } else {
-                return ReE(res, 404, { msg: "Authentication failed. Incorrect Email or Password" })
+                return ReE(res, 404, { msg: "Authentication failed. Incorrect Email or Password" });
             }
 
         } catch (error) {
-            console.log("error", error);
             ReE(res, 404, { msg: error.message });
         }
     },
 
     // Register
-    register: async (req, res, next) => {
+    register: async (req, res) => {
 
         try {
 
@@ -57,20 +61,21 @@ const authController = {
             return ReS(res, 201, "Successfully Register", user);
 
         } catch (error) {
-            console.log("error", error);
             return ReE(res, 404, error);
         }
     },
 
     // Forget Password
-    forgetPassword: async (req, res, next) => {
+    forgetPassword: async (req, res) => {
 
         try {
 
             const { email } = req.body;
-            const [result] = await of(User.findOne({ email: email }));
+            const [result, resultError] = await of(User.findOne({ email: email }));
 
-            if (result !== null) {
+            if (resultError) throw resultError;
+
+            if (result) {
                 const OTP = randomstring.generate({
                     length: 6,
                     charset: 'numeric'
@@ -78,20 +83,21 @@ const authController = {
 
                 // Send Mail
                 sendResetPasswordMail(result.name, result.email, OTP, "Forgot Password");
-                await of(User.updateOne({ email: email }, { $set: { token: OTP } }))
-                return ReS(res, 200, { msg: "Successfully sent! Please check your mail." })
+                await of(User.updateOne({ email: email }, { $set: { token: OTP } }));
+
+                return ReS(res, 200, { msg: "Successfully sent! Please check your mail." });
+
             } else {
-                return ReE(res, 400, { msg: "User not found" })
+                return ReE(res, 400, { msg: "User not found" });
             }
 
         } catch (error) {
-            return ReE(res, 400, error.message)
+            return ReE(res, 400, error.message);
         }
-
     },
 
     // Verify OTP
-    verifyOTP: async (req, res, next) => {
+    verifyOTP: async (req, res) => {
 
         try {
 
@@ -99,18 +105,14 @@ const authController = {
 
             if (email) {
 
-                const [isUser] = await of(User.findOne({ email: email }));
+                const [isUser, userError] = await of(User.findOne({ email: email, token: otp }));
 
-                if (isUser !== null) {
+                if (userError) throw userError;
 
-                    if (otp && isUser?.token == otp) {
-                        return ReS(res, 200, { msg: "Valid OTP" });
-                    } else {
-                        return ReS(res, 400, { msg: "Invalid OTP" });
-                    }
-
+                if (isUser) {
+                    return ReS(res, 200, { msg: "Valid OTP" });
                 } else {
-                    return ReE(res, 400, { msg: 'User not found' });
+                    return ReE(res, 400, { msg: 'Invalid OTP' });
                 }
 
             } else {
@@ -123,32 +125,30 @@ const authController = {
     },
 
     // Reset Password
-    resetPassword: async (req, res, next) => {
+    resetPassword: async (req, res) => {
 
         try {
 
             const { email, password, confirm_password, otp } = req.body;
-            const [user] = await of(User.findOne({ email: email }));
+            const [user, userError] = await of(User.findOne({ email: email, token: otp }));
 
-            if (user !== null) {
-                console.log("user.token, otp", user.token, otp)
+            if (userError) throw userError
 
-                if (user.token == otp) {
-                    const [newPassword] = await of(bcrypt.hashSync(password, 8));
-                    const [updatePassword] = await of(User.findByIdAndUpdate(
-                        { _id: user._id },
-                        { $set: { password: newPassword, token: '' } },
-                        { new: true }
-                    ));
+            if (user) {
 
-                    return ReS(res, 200, { msg: 'User password has been reset' });
+                const [newPassword] = await of(bcrypt.hashSync(password, 8));
+                const [updatePassword, updatePasswordError] = await of(User.findByIdAndUpdate(
+                    { _id: user._id },
+                    { $set: { password: newPassword, token: '' } },
+                    { new: true }
+                ));
 
-                } else {
-                    return ReE(res, 400, { msg: "Email and OTP not found" })
-                }
+                if (updatePasswordError) throw updatePasswordError;
+
+                return ReS(res, 200, { msg: 'User password has been reset' });
 
             } else {
-                return ReE(res, 401, { msg: "User not found" });
+                return ReE(res, 401, { msg: "Invalid OTP" });
             }
 
         } catch (error) {
