@@ -127,7 +127,7 @@ const userController = {
             if (resultError) throw resultError;
 
             if (result) {
-                return ReS(res, 200, "User delete successfully!");
+                return ReS(res, 200, { msg: "User delete successfully!" });
             }
 
         } catch (error) {

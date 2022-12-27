@@ -17,7 +17,6 @@ export const validateLogin = [
 
 // Check weather email is exist or not.
 const isEmailExist = async (req, res, next) => {
-    console.log("req, res, next", req, res, next);
     await of(User.findOne({ email: req.body.email }, function (err, user) {
         if (err) {
             res.status(404).send("ERR");

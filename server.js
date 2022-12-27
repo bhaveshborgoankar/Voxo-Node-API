@@ -2,7 +2,6 @@
 import express from 'express';
 import server from 'http';
 import * as dotenv from 'dotenv';
-import path from 'path';
 import fileUpload from 'express-fileupload';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
@@ -13,21 +12,20 @@ import routes from './routes/index.routes.js';
 import { connectDB } from './connection/db.js';
 
 var app = express();
-const __dirname = path.resolve();
+
+// enable files upload
+app.use(fileUpload({
+    createParentPath: true
+}));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-
-// app.use('/form', express.static(__dirname + '/index.html'));
 
 // DOT env configure
 dotenv.config();
 
 // Connect DB
 connectDB();
-
-app.use(fileUpload());
 
 /* Set headers */
 app.use(function (req, res, next) {

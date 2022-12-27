@@ -1,8 +1,10 @@
 import { of } from "await-of";
 import { Category } from "../models/category.modal.js";
 import { ReE, ReS } from '../helper/utils.js';
+import { modifiedImage } from "../helper/uploadImage.js";
 
 const categoryController = {
+
 
     // Get Category
     index: async (req, res) => {
@@ -24,17 +26,19 @@ const categoryController = {
     store: async (req, res) => {
 
         try {
-
             const { name } = req.body;
+            const { image } = req.files;
             const [user, userError] = await of(Category.findOne({ name: name }));
 
             if (userError) throw userError;
 
             if (!user) {
 
+                const result = modifiedImage(image)
+
                 const category = await of(Category.create({
                     name: name,
-                    // image: image
+                    image: result
                 }));
 
                 return ReS(res, 200, "Category created successfully", category);
@@ -77,18 +81,19 @@ const categoryController = {
 
             const { id } = req.params;
             const { name } = req.body;
+            const image = req?.files?.image;
 
             if (!id) {
                 return ReE(res, 400, { msg: "Category id is required" });
             }
-
+            const imageData = modifiedImage(image)
             const [category, categoryError] = await of(Category.findOne({ _id: id }));
 
             if (categoryError) throw categoryError;
 
             var updateCategory = {
                 name: name,
-                // image: image
+                image: imageData ?? category.image
             };
 
             const [result, resultError] = await of(Category.findByIdAndUpdate(
