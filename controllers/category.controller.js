@@ -27,7 +27,7 @@ const categoryController = {
 
         try {
             const { name } = req.body;
-            const { image } = req.files;
+            const image = req.files.image;
             const [user, userError] = await of(Category.findOne({ name: name }));
 
             if (userError) throw userError;
