@@ -135,7 +135,34 @@ const categoryController = {
             return ReE(res, 400, { msg: error.message });
         }
 
-    }
+    },
+
+    // Update Category Status
+    status: async (req, res) => {
+
+        try {
+
+            const { id } = req.params;
+            const { status } = req.params;
+
+            const [category, categoryError] = await of(Category.findById({ _id: id }));
+
+            if (categoryError) throw categoryError;
+
+            const [statusUpdate, statusUpdateError] = await of(Category.findByIdAndUpdate(
+                { _id: id },
+                { $set: { is_active: status } },
+                { new: true }
+            ));
+
+            if (statusUpdateError) throw statusUpdateError;
+
+            if (statusUpdate) return ReS(res, 200, { msg: "Category status is updated" });
+
+        } catch (error) {
+            return ReE(res, 404, { msg: error.message });
+        }
+    },
 
 };
 

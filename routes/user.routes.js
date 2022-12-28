@@ -15,10 +15,13 @@ router.post('/create', isEmailExist, userController.store);
 router.get('/:id', checkAuthentication, userController.edit);
 
 // Edit User
-router.put('/edit/:id', userController.update);
+router.put('/edit/:id', checkAuthentication, userController.update);
 
 // Delete User
 router.delete('/delete/:id', checkAuthentication, userController.delete);
+
+// Update User Status
+router.put('/:id/:status', checkAuthentication, userController.status)
 
 export default router;
 

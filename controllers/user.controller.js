@@ -133,7 +133,34 @@ const userController = {
         } catch (error) {
             return ReE(res, 400, { msg: error.message });
         }
-    }
+    },
+
+    // Update User Status
+    status: async (req, res) => {
+
+        try {
+
+            const { id } = req.params;
+            const { status } = req.params;
+
+            const [user, userError] = await of(User.findById({ _id: id }));
+
+            if (userError) throw userError;
+
+            const [statusUpdate, statusUpdateError] = await of(User.findByIdAndUpdate(
+                { _id: id },
+                { $set: { is_active: status } },
+                { new: true }
+            ));
+
+            if (statusUpdateError) throw statusUpdateError;
+
+            if (statusUpdate) return ReS(res, 200, { msg: "User status is updated" });
+
+        } catch (error) {
+            return ReE(res, 404, { msg: error.message });
+        }
+    },
 }
 
 export default userController;

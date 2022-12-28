@@ -1,16 +1,13 @@
 import mongoose from "mongoose";
 
-var categorySchema = new mongoose.Schema({
+var tagSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true
     },
-    image: {
+    type: {
         type: String,
-    },
-    parent_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'categories'
+        required: true
     },
     is_deleted: {
         type: Boolean,
@@ -27,5 +24,5 @@ var categorySchema = new mongoose.Schema({
     }
 });
 
-const Category = mongoose.model('Category', categorySchema);
-export { Category };
+const Tag = mongoose.model('Tag', tagSchema);
+export { Tag };

@@ -34,7 +34,8 @@ var userSchema = new mongoose.Schema({
         default: false
     },
     is_active: {
-        type: Boolean
+        type: Boolean,
+        default: true
     },
 },
     {

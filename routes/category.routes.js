@@ -8,7 +8,7 @@ const router = express.Router();
 // Get Category
 router.get('/categories', checkAuthentication, categoryController.index);
 
-// Create
+// Create Category
 router.post('/create', checkAuthentication, categoryController.store);
 
 // Edit Category
@@ -17,7 +17,10 @@ router.get('/:id', checkAuthentication, categoryController.edit)
 // Update Category
 router.put('/edit/:id', checkAuthentication, categoryController.update);
 
-// Delete
+// Delete Category
 router.delete('/delete/:id', checkAuthentication, categoryController.delete);
+
+// Update User Status
+router.put('/:id/:status', checkAuthentication, categoryController.status)
 
 export default router;
