@@ -5,10 +5,12 @@ import registerValid from '../middleware/validator.middleware.js';
 const router = express.Router();
 
 // Register
-router.post('/register', registerValid, authController.register);
+// router.post('/register', registerValid, authController.register);
+router.post('/register', authController.register);
 
 // Login
-router.post('/login', registerValid, authController.login);
+// router.post('/login', registerValid, authController.login);
+router.post('/login', authController.login);
 
 // Forgot Password
 router.post('/forgetPassword', authController.forgetPassword);
