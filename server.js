@@ -2,6 +2,7 @@
 import express from 'express';
 import server from 'http';
 import * as dotenv from 'dotenv';
+import path from "path";
 import fileUpload from 'express-fileupload';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
@@ -13,6 +14,10 @@ import { connectDB } from './connection/db.js';
 
 var app = express();
 
+const __dirname = path.resolve();
+
+app.use(express.static(path.join(__dirname, "public/")));
+
 // enable files upload
 app.use(fileUpload({
     createParentPath: true
@@ -20,6 +25,8 @@ app.use(fileUpload({
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+
 
 // DOT env configure
 dotenv.config();
@@ -45,6 +52,8 @@ app.use(function (req, res, next) {
 app.use(cookieParser());
 
 app.use(session({ secret: "voxo-secret", resave: true, saveUninitialized: true }));
+
+
 
 // Routes
 app.use('/api', routes);

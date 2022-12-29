@@ -9,7 +9,14 @@ export const TagController = {
 
         try {
 
-            const [tags, tagsError] = await of(Tag.find({ is_deleted: false }));
+            const { type } = req.query
+
+            const searchType = {
+                is_deleted: false,
+                type: type
+            };
+
+            const [tags, tagsError] = await of(Tag.find(type ? searchType : { is_deleted: false }));
 
             if (tagsError) throw tagsError;
 
@@ -25,20 +32,22 @@ export const TagController = {
 
         try {
 
-            const { name } = req.body;
+            const { name, type, is_active } = req.body;
 
             if (!name) {
                 return ReE(res, 400, { msg: "Tag name is required" });
             };
 
-            const [isTagExist, isTagExistError] = await of(Tag.findOne({ name: name }));
+            const [isTagExist, isTagExistError] = await of(Tag.findOne({ name: name, type: type }));
 
             if (isTagExistError) throw isTagExistError;
 
             if (!isTagExist) {
 
                 const tag = await of(Tag.create({
-                    name: name
+                    name: name,
+                    type: type,
+                    is_active: is_active
                 }));
 
                 return ReS(res, 200, { msg: "Tag created successfully", data: tag });
@@ -80,15 +89,21 @@ export const TagController = {
         try {
 
             const { id } = req.params;
-            const { name } = req.body;
+            const { name, type, is_active } = req.body;
 
             if (!id) {
                 return ReE(res, 400, { msg: "Tag id is required" });
             };
 
+            const updatedTag = {
+                name: name,
+                type: type,
+                is_active: is_active
+            }
+
             const [result, resultError] = await of(Tag.findByIdAndUpdate(
                 { _id: id },
-                { $set: { name: name } },
+                { $set: updatedTag },
                 { new: true }));
 
             if (resultError) throw resultError;

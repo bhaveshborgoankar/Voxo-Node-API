@@ -8,7 +8,7 @@ const router = express.Router();
 router.get('/tags', checkAuthentication, TagController.index);
 
 //  Create Tag
-router.post('/create', TagController.store);
+router.post('/create', checkAuthentication, TagController.store);
 
 // Edit Tag
 router.get('/:id', checkAuthentication, TagController.edit);

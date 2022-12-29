@@ -1,13 +1,14 @@
 import express from 'express'
 import authController from '../controllers/auth.controller.js';
+import registerValid from '../middleware/validator.middleware.js';
 
 const router = express.Router();
 
 // Register
-router.post('/register', authController.register);
+router.post('/register', registerValid, authController.register);
 
 // Login
-router.post('/login', authController.login);
+router.post('/login', registerValid, authController.login);
 
 // Forgot Password
 router.post('/forgetPassword', authController.forgetPassword);

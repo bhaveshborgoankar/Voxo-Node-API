@@ -49,13 +49,12 @@ const authController = {
 
         try {
 
-            const { email, password, name, phone, country } = req.body;
+            const { email, password, name, phone } = req.body;
             const [user] = await of(User.create({
                 email: email,
                 password: password,
                 name: name,
-                phone: phone,
-                country: country
+                phone: phone
             }));
 
             return ReS(res, 201, "Successfully Register", user);

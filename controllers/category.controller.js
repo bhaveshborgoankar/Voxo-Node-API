@@ -26,7 +26,7 @@ const categoryController = {
     store: async (req, res) => {
 
         try {
-            const { name } = req.body;
+            const { name, is_active } = req.body;
             const image = req.files.image;
             const [user, userError] = await of(Category.findOne({ name: name }));
 
@@ -38,7 +38,8 @@ const categoryController = {
 
                 const category = await of(Category.create({
                     name: name,
-                    image: result
+                    image: result,
+                    is_active: is_active
                 }));
 
                 return ReS(res, 200, "Category created successfully", category);
@@ -80,7 +81,7 @@ const categoryController = {
         try {
 
             const { id } = req.params;
-            const { name } = req.body;
+            const { name, is_active } = req.body;
             const image = req?.files?.image;
 
             if (!id) {
@@ -93,7 +94,8 @@ const categoryController = {
 
             var updateCategory = {
                 name: name,
-                image: imageData ?? category.image
+                image: imageData ?? category.image,
+                is_active: is_active
             };
 
             const [result, resultError] = await of(Category.findByIdAndUpdate(
