@@ -1,7 +1,7 @@
 import express from "express";
 import userController from "../controllers/user.controller.js";
+import { CategoryMiddleware } from "../middleware/category.middleware.js";
 import { checkAuthentication } from "../middleware/index.js";
-// import { isEmailExist } from "../validation/index.js";
 
 const router = express.Router();
 
@@ -9,7 +9,7 @@ const router = express.Router();
 router.get('/users', checkAuthentication, userController.index);
 
 // Create User
-router.post('/create', userController.store);
+router.post('/create', checkAuthentication, CategoryMiddleware.create, userController.store);
 
 // Edit User
 router.get('/:id', checkAuthentication, userController.edit);

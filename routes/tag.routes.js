@@ -1,6 +1,7 @@
 import express from 'express'
 import { TagController } from '../controllers/tag.controller.js';
 import { checkAuthentication } from '../middleware/index.js';
+import { TagMiddleware } from '../middleware/tag.middleware.js';
 
 const router = express.Router();
 
@@ -8,7 +9,7 @@ const router = express.Router();
 router.get('/tags', checkAuthentication, TagController.index);
 
 //  Create Tag
-router.post('/create', checkAuthentication, TagController.store);
+router.post('/create', TagMiddleware.create, TagController.store);
 
 // Edit Tag
 router.get('/:id', checkAuthentication, TagController.edit);

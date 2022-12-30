@@ -132,7 +132,7 @@ export const TagController = {
                 { new: true })
             );
 
-            if (resultError) throw resultError
+            if (resultError) throw resultError;
 
             return ReS(res, 200, { msg: "Tag delete successfully" });
 
