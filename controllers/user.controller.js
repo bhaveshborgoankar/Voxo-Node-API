@@ -25,13 +25,18 @@ const userController = {
 
         try {
 
-            const { name, email, phone, password } = req.body;
+            const { name, email, phone, password, street, state, zip } = req.body;
 
             const user = await of(User.create({
                 email: email,
                 password: password,
                 name: name,
-                phone: phone
+                phone: phone,
+                address: {
+                    street: street,
+                    state: state,
+                    zip: zip
+                }
             }))
             return ReS(res, 200, "User create successfully", user);
 
@@ -73,7 +78,7 @@ const userController = {
                 return ReE(res, 400, { msg: "User id is required" });
             }
 
-            const { name, email, phone, is_active } = req.body;
+            const { name, email, phone, is_active, street, state, zip } = req.body;
             const [user, userError] = await of(User.find({ _id: id }));
 
             if (userError) throw userError;
@@ -96,6 +101,15 @@ const userController = {
                 if (is_active) {
                     updateUser.is_active = is_active
                 };
+                if (street || state || zip) {
+
+                    updateUser.address = {
+                        street: street,
+                        state: state,
+                        zip: zip
+                    }
+
+                }
             }
 
             const [result, resultError] = await of(User.findByIdAndUpdate({ _id: id }, { $set: updateUser }, { new: true }));

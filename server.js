@@ -26,8 +26,6 @@ app.use(fileUpload({
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-
-
 // DOT env configure
 dotenv.config();
 
@@ -52,8 +50,6 @@ app.use(function (req, res, next) {
 app.use(cookieParser());
 
 app.use(session({ secret: "voxo-secret", resave: true, saveUninitialized: true }));
-
-
 
 // Routes
 app.use('/api', routes);

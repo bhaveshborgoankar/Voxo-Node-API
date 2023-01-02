@@ -1,4 +1,4 @@
-import express from 'express'
+import express from 'express';
 import authController from '../controllers/auth.controller.js';
 import { AuthMiddleware } from '../middleware/auth.middleware.js';
 
@@ -14,7 +14,7 @@ router.post('/login', AuthMiddleware.login, authController.login);
 router.post('/forgetPassword', AuthMiddleware.forgotPassword, authController.forgetPassword);
 
 // Verify OTP
-router.post('/verifyOtp', AuthMiddleware.verifyOtp, authController.verifyOTP)
+router.post('/verifyOtp', AuthMiddleware.verifyOtp, authController.verifyOTP);
 
 // Reset Password
 router.post('/resetPassword', AuthMiddleware.updatePassword, authController.resetPassword);
