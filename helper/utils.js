@@ -1,9 +1,10 @@
 
-export const ReS = async (res, code, message, data) => { // Success Web Response
-    return data ? res.status(code).json({ msg: message, data: data })
-        : res.status(code).send(message);
+export const ReS = async (res, code, obj) => { // Success Web Response
+    obj.success = true;
+    return res.status(code).json(obj);
 };
 
-export const ReE = async (res, code, message) => { // Error Web Response
-    return res.status(code).send(message);
+export const ReE = async (res, code, obj) => { // Error Web Response
+    obj.success = false;
+    return res.status(code).json(obj);
 };

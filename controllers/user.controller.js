@@ -6,48 +6,35 @@ const userController = {
 
     // Get User
     index: async (req, res) => {
-
         try {
-
             const [users, userError] = await of(User.find({ is_deleted: false }));
-
             if (userError) throw userError;
 
-            return ReS(res, 200, 'Get all users successfully', users);
-
+            return ReS(res, 200, { msg: 'Get all users successfully', data: users });
         } catch (error) {
-            return ReE(res, 400, { msg: error.message })
+            return ReE(res, error.code, { msg: error.message });
         }
     },
 
     // Store User
     store: async (req, res) => {
-
         try {
-
             const { name, email, phone, password, street, state, zip } = req.body;
 
             const user = await of(User.create({
                 email: email,
                 password: password,
                 name: name,
-                phone: phone,
-                address: {
-                    street: street,
-                    state: state,
-                    zip: zip
-                }
+                phone: phone
             }))
             return ReS(res, 200, "User create successfully", user);
-
         } catch (error) {
-            return ReE(res, 400, { msg: error.message });
+            return ReE(res, error.code, { msg: error.message });;
         };
     },
 
     // Edit User
     edit: async (req, res) => {
-
         try {
 
             const { id } = req.params;
@@ -57,13 +44,11 @@ const userController = {
             }
 
             const [user, userError] = await of(User.findById({ _id: id }));
-
             if (userError) throw userError;
 
             return ReS(res, 200, { msg: 'Get user by Id successfully', data: user });
-
         } catch (error) {
-            return ReE(res, 404, { msg: error.message });
+            return ReE(res, error.code, { msg: error.message });
         }
     },
 
@@ -101,15 +86,7 @@ const userController = {
                 if (is_active) {
                     updateUser.is_active = is_active
                 };
-                if (street || state || zip) {
-
-                    updateUser.address = {
-                        street: street,
-                        state: state,
-                        zip: zip
-                    }
-
-                }
+    
             }
 
             const [result, resultError] = await of(User.findByIdAndUpdate({ _id: id }, { $set: updateUser }, { new: true }));
@@ -117,11 +94,11 @@ const userController = {
             if (resultError) throw resultError;
 
             if (result) {
-                return ReS(res, 200, "User update Successfully!", result);
+                return ReS(res, 200, { msg: "User update Successfully!", data: result });
             }
 
         } catch (error) {
-            return ReS(res, 400, { msg: error.message, });
+            return ReE(res, error.code, { msg: error.message });
         }
     },
 
@@ -145,7 +122,7 @@ const userController = {
             }
 
         } catch (error) {
-            return ReE(res, 400, { msg: error.message });
+            return ReE(res, error.code, { msg: error.message });
         }
     },
 
@@ -166,13 +143,12 @@ const userController = {
                 { $set: { is_active: status } },
                 { new: true }
             ));
-
             if (statusUpdateError) throw statusUpdateError;
 
             if (statusUpdate) return ReS(res, 200, { msg: "User status is updated" });
 
         } catch (error) {
-            return ReE(res, 404, { msg: error.message });
+            return ReE(res, error.code, { msg: error.message });
         }
     },
 }

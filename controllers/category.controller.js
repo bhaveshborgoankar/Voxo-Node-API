@@ -5,57 +5,43 @@ import { modifiedImage } from "../helper/uploadImage.js";
 
 const categoryController = {
 
-
     // Get Category
     index: async (req, res) => {
-
         try {
-
             const [category, categoryError] = await of(Category.find({ is_deleted: false }));
-
             if (categoryError) throw categoryError;
-
-            return ReS(res, 200, "Get all categories successfully", category);
-
+            return ReS(res, 200, { msg: "Get all categories successfully", data: category });
         } catch (error) {
-            return ReE(res, 400, error.message);
+            return ReE(res, error.code, { msg: error.message });
         }
     },
 
     // Store Category
     store: async (req, res) => {
-
         try {
             const { name, is_active } = req.body;
-            const image = req.files.image;
             const [user, userError] = await of(Category.findOne({ name: name }));
-
             if (userError) throw userError;
 
             if (!user) {
-
-                const result = modifiedImage(image)
-
+                let image = req.files.image ? modifiedImage(req.files.image) : null;
                 const category = await of(Category.create({
                     name: name,
-                    image: result,
+                    image: image,
                     is_active: is_active
                 }));
-
-                return ReS(res, 200, "Category created successfully", category);
-
+                return ReS(res, 200, { msg: "Category created successfully", data: category});
             } else {
                 return ReE(res, 400, { msg: "Category is already exist" });
             }
 
         } catch (error) {
-            ReE(res, 400, { msg: error.message });
+            return ReE(res, error.code, { msg: error.message });
         };
     },
 
     // Edit Category
     edit: async (req, res) => {
-
         try {
 
             const { id } = req.params;
@@ -68,10 +54,10 @@ const categoryController = {
 
             if (categoryError) throw categoryError;
 
-            return ReS(res, 200, { msg: 'Get category by Id successfully', data: category });
+            return ReS(res, 200, { msg: 'Get category successfully', data: category });
 
         } catch (error) {
-            return ReE(res, 404, { msg: error.message });
+            return ReE(res, error.code, { msg: error.message });
         }
     },
 
@@ -105,10 +91,10 @@ const categoryController = {
 
             if (resultError) throw resultError;
 
-            return ReS(res, 200, "Category updated successfully", result);
+            return ReS(res, 200, { msg: "Category updated successfully", data: result });
 
         } catch (error) {
-            return ReE(res, 400, { msg: error.message });
+            return ReE(res, error.code, { msg: error.message });
         };
     },
 
@@ -134,7 +120,7 @@ const categoryController = {
             return ReS(res, 200, { msg: "Category delete successfully" });
 
         } catch (error) {
-            return ReE(res, 400, { msg: error.message });
+            return ReE(res, error.code, { msg: error.message });
         }
 
     },
@@ -162,7 +148,7 @@ const categoryController = {
             if (statusUpdate) return ReS(res, 200, { msg: "Category status is updated" });
 
         } catch (error) {
-            return ReE(res, 404, { msg: error.message });
+            return ReE(res, error.code, { msg: error.message });
         }
     },
 

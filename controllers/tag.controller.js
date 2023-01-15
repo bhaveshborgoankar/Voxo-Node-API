@@ -6,30 +6,30 @@ export const TagController = {
 
     // Get Tags
     index: async (req, res) => {
-
         try {
 
             const { type } = req.query
 
-            const searchType = {
-                is_deleted: false,
-                type: type
+            const filter = {
+                is_deleted: false
             };
 
-            const [tags, tagsError] = await of(Tag.find(type ? searchType : { is_deleted: false }));
+            if(type) { 
+                filter.type = type;
+            }
 
+            const [tags, tagsError] = await of(Tag.find(filter));
             if (tagsError) throw tagsError;
 
-            return ReS(res, 200, "Get all tags successfully", tags);
+            return ReS(res, 200, { msg: "Get all tags successfully", data: tags });
 
         } catch (error) {
-            return ReE(res, 400, { msg: error.message });
+            return ReE(res, error.code, { msg: error.message });
         }
     },
 
     // Store Tags
     store: async (req, res) => {
-
         try {
 
             const { name, type, is_active } = req.body;
@@ -39,7 +39,6 @@ export const TagController = {
             };
 
             const [isTagExist, isTagExistError] = await of(Tag.findOne({ name: name, type: type }));
-
             if (isTagExistError) throw isTagExistError;
 
             if (!isTagExist) {
@@ -57,13 +56,12 @@ export const TagController = {
             }
 
         } catch (error) {
-            return ReE(res, 400, { msg: error.message });
+            return ReE(res, error.code, { msg: error.message });
         }
     },
 
     // Edit Tag
     edit: async (req, res) => {
-
         try {
 
             const { id } = req.params;
@@ -73,19 +71,17 @@ export const TagController = {
             }
 
             const [tag, tagError] = await of(Tag.findById({ _id: id }));
-
             if (tagError) throw tagError;
 
             return ReS(res, 200, { msg: 'Get tag by Id successfully', data: tag });
 
         } catch (error) {
-            return ReE(res, 400, { msg: error.message });
+            return ReE(res, error.code, { msg: error.message });
         }
     },
 
     // Update Tag
     update: async (req, res) => {
-
         try {
 
             const { id } = req.params;
@@ -108,16 +104,15 @@ export const TagController = {
 
             if (resultError) throw resultError;
 
-            return ReS(res, 200, "Tag updated successfully", result);
+            return ReS(res, 200, { msg: "Tag updated successfully", data: result });
 
         } catch (error) {
-            return ReE(res, 400, { msg: error.message });
+            return ReE(res, error.code, { msg: error.message });
         };
     },
 
     // Delete Tag
     delete: async (req, res) => {
-
         try {
 
             const { id } = req.params;
@@ -137,21 +132,19 @@ export const TagController = {
             return ReS(res, 200, { msg: "Tag delete successfully" });
 
         } catch (error) {
-            return ReE(res, 400, { msg: error.message });
+            return ReE(res, error.code, { msg: error.message });
         }
 
     },
 
     // Update Category Status
     status: async (req, res) => {
-
         try {
 
             const { id } = req.params;
             const { status } = req.params;
 
             const [tag, TagError] = await of(Tag.findById({ _id: id }));
-
             if (TagError) throw TagError;
 
             const [statusUpdate, statusUpdateError] = await of(Tag.findByIdAndUpdate(
@@ -159,13 +152,12 @@ export const TagController = {
                 { $set: { is_active: status } },
                 { new: true }
             ));
-
             if (statusUpdateError) throw statusUpdateError;
 
             if (statusUpdate) return ReS(res, 200, { msg: "Tag status is updated" });
 
         } catch (error) {
-            return ReE(res, 404, { msg: error.message });
+            return ReE(res, error.code, { msg: error.message });
         }
     },
 };
