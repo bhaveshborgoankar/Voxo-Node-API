@@ -64,8 +64,8 @@ const userController = {
             }
 
             const { name, email, phone, is_active, street, state, zip } = req.body;
+            
             const [user, userError] = await of(User.find({ _id: id }));
-
             if (userError) throw userError;
 
             if (user) {
@@ -92,11 +92,8 @@ const userController = {
             const [result, resultError] = await of(User.findByIdAndUpdate({ _id: id }, { $set: updateUser }, { new: true }));
 
             if (resultError) throw resultError;
-
-            if (result) {
-                return ReS(res, 200, { msg: "User update Successfully!", data: result });
-            }
-
+            return ReS(res, 200, { msg: "User update Successfully!", data: result });
+            
         } catch (error) {
             return ReE(res, error.code, { msg: error.message });
         }
@@ -114,12 +111,9 @@ const userController = {
             }
 
             const [result, resultError] = await of(User.updateOne({ _id: id }, { $set: { is_deleted: true } }));
-
             if (resultError) throw resultError;
 
-            if (result) {
-                return ReS(res, 200, { msg: "User delete successfully!" });
-            }
+            return ReS(res, 200, { msg: "User delete successfully!" });
 
         } catch (error) {
             return ReE(res, error.code, { msg: error.message });
@@ -135,7 +129,6 @@ const userController = {
             const { status } = req.params;
 
             const [user, userError] = await of(User.findById({ _id: id }));
-
             if (userError) throw userError;
 
             const [statusUpdate, statusUpdateError] = await of(User.findByIdAndUpdate(
@@ -144,8 +137,7 @@ const userController = {
                 { new: true }
             ));
             if (statusUpdateError) throw statusUpdateError;
-
-            if (statusUpdate) return ReS(res, 200, { msg: "User status is updated" });
+            return ReS(res, 200, { msg: "User status is updated" });
 
         } catch (error) {
             return ReE(res, error.code, { msg: error.message });

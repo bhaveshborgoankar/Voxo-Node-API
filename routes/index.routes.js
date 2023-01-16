@@ -9,7 +9,7 @@ const router = express.Router()
 // Auth
 router.use('/auth', AuthRoutes);
 
-// User_management
+// User
 router.use('/user', UserRoutes);
 
 // Category

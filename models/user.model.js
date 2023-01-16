@@ -1,19 +1,6 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 
-// User Address
-var addressSchema = new mongoose.Schema({
-    street: {
-        type: String,
-    },
-    state: {
-        type: String,
-    },
-    zip: {
-        type: Number,
-    },
-})
-
 // User schema
 var userSchema = new mongoose.Schema({
     name: {
@@ -40,7 +27,6 @@ var userSchema = new mongoose.Schema({
     image: {
         type: String
     },
-    address: [addressSchema],
     token: {
         type: Number
     },
@@ -74,5 +60,5 @@ userSchema.pre('save', async function (next) {
     }
 });
 
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model('users', userSchema);
 export { User }

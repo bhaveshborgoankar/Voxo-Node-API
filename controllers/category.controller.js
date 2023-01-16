@@ -1,5 +1,5 @@
 import { of } from "await-of";
-import { Category } from "../models/category.modal.js";
+import { Category } from "../models/category.model.js";
 import { ReE, ReS } from '../helper/utils.js';
 import { modifiedImage } from "../helper/uploadImage.js";
 

@@ -1,6 +1,6 @@
 import { of } from "await-of"
 import { ReE, ReS } from "../helper/utils.js"
-import { Tag } from "../models/tag.modal.js"
+import { Tag } from "../models/tag.model.js"
 
 export const TagController = {
 
