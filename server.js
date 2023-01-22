@@ -76,6 +76,6 @@ app.use((error, req, res, next) => {
 
 /* Bind server on default port of https */
 var Server = server.createServer(app);
-Server.listen(process.env.APP_PORT || 3000, function () {
-    console.log('Server listening on port ' + process.env.PUBLIC_URL);
+Server.listen(3000, function () {
+    console.log('Server listening on port ' + 3000);
 });

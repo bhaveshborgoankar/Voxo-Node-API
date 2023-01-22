@@ -6,7 +6,7 @@ import { checkAuthentication } from '../middleware/index.js'
 const router = express.Router();
 
 // Get Category
-router.get('/categories', checkAuthentication, categoryController.index);
+router.get('/', checkAuthentication, categoryController.index);
 
 // Create Category
 router.post('/create', checkAuthentication, CategoryMiddleware.create, categoryController.store);

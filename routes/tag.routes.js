@@ -6,7 +6,7 @@ import { TagMiddleware } from '../middleware/tag.middleware.js';
 const router = express.Router();
 
 // Get Tags
-router.get('/tags', checkAuthentication, TagController.index);
+router.get('/', checkAuthentication, TagController.index);
 
 //  Create Tag
 router.post('/create', TagMiddleware.create, TagController.store);

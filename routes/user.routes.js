@@ -24,4 +24,3 @@ router.delete('/delete/:id', checkAuthentication, userController.delete);
 router.put('/:id/:status', checkAuthentication, userController.status)
 
 export default router;
-

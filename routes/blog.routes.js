@@ -5,7 +5,7 @@ import { checkAuthentication } from '../middleware/index.js';
 const router = express.Router();
 
 // Get blogs
-router.get('/blogs', checkAuthentication, blogController.index);
+router.get('/', checkAuthentication, blogController.index);
 
 // Create Blog
 router.post('/create', checkAuthentication, blogController.store);

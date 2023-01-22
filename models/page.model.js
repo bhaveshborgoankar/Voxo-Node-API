@@ -1,23 +1,12 @@
 import mongoose from "mongoose";
 
-var blogSchema = new mongoose.Schema({
+var pageSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true
     },
-    description: {
-        type: String,
-    },
     content: {
         type: String,
-    },
-    categories: {
-        type: [mongoose.Schema.Types.ObjectId],
-        ref: 'categories'
-    },
-    tags: {
-        type: [mongoose.Schema.Types.ObjectId],
-        ref: 'tags'
     },
     status: {
         type: Boolean,
@@ -38,5 +27,5 @@ var blogSchema = new mongoose.Schema({
     }
 });
 
-const Blog = mongoose.model('blogs', blogSchema);
-export { Blog };
+const Page = mongoose.model('pages', pageSchema);
+export { Page };

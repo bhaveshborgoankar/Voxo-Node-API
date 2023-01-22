@@ -19,13 +19,12 @@ const authController = {
                 bcrypt.compare(password, user.password, (error, isMatch) => {
                     if (error) {
                         return ReE(res, 404, { msg: "No User Found." });
+                    } 
+                    if (isMatch) {
+                        var token = Jwt.sign({ _id: user._id }, process.env.JWT_SECRET_KEY, { expiresIn: "48h" });
+                        return ReS(res, 200, { msg: "Login Successfully", token: token, data: user });
                     } else {
-                        if (isMatch) {
-                            var token = Jwt.sign({ _id: user._id }, process.env.JWT_SECRET_KEY, { expiresIn: "48h" });
-                            return ReS(res, 200, { msg: "Login Successfully", token: token });
-                        } else {
-                            return ReE(res, 404, { msg: "Authentication failed. Incorrect Email or Password" });
-                        }
+                        return ReE(res, 404, { msg: "Authentication failed. Incorrect Email or Password" });
                     }
                 });
             } else {
@@ -47,8 +46,7 @@ const authController = {
                 name: name,
                 phone: phone
             }));
-
-            return ReS(res, 201, "User Registered Successfully", user);
+            return ReS(res, 201, { msg: "User Registered Successfully.", data: user });
         } catch (error) {
             return ReE(res, error.code, { msg: error.message });
         }
@@ -59,7 +57,6 @@ const authController = {
         try {
             const { email } = req.body;
             const [result, resultError] = await of(User.findOne({ email: email }));
-
             if (resultError) throw resultError;
 
             if (result) {
@@ -88,16 +85,14 @@ const authController = {
         try {
             const { otp, email } = req.body;
             if (email) {
-
                 const [isUser, userError] = await of(User.findOne({ email: email, token: otp }));
-
                 if (userError) throw userError;
 
-                if (isUser) {
-                    return ReS(res, 200, { msg: "Valid OTP" });
-                } else {
+                if (!isUser) {
                     return ReE(res, 400, { msg: 'Invalid OTP' });
                 }
+
+                return ReS(res, 200, { msg: "Valid OTP" });
 
             } else {
                 return ReE(res, 400, { msg: 'User not found' });
@@ -113,25 +108,21 @@ const authController = {
 
             const { email, password, confirm_password, otp } = req.body;
             const [user, userError] = await of(User.findOne({ email: email, token: otp }));
-
             if (userError) throw userError
 
-            if (user) {
-
-                const [newPassword] = await of(bcrypt.hashSync(password, 8));
-                const [updatePassword, updatePasswordError] = await of(User.findByIdAndUpdate(
-                    { _id: user._id },
-                    { $set: { password: newPassword, token: '' } },
-                    { new: true }
-                ));
-
-                if (updatePasswordError) throw updatePasswordError;
-
-                return ReS(res, 200, { msg: 'User password has been reset' });
-
-            } else {
+            if (!user) {
                 return ReE(res, 401, { msg: "Invalid OTP" });
             }
+
+            const [newPassword] = await of(bcrypt.hashSync(password, 8));
+            const [updatePassword, updatePasswordError] = await of(User.findByIdAndUpdate(
+                { _id: user._id },
+                { $set: { password: newPassword, token: '' } },
+                { new: true }
+            ));
+
+            if (updatePasswordError) throw updatePasswordError;
+            return ReS(res, 200, { msg: 'User password has been reset' });
 
         } catch (error) {
             return ReE(res, error.code, { msg: error.message });
