@@ -2,6 +2,7 @@ import { of } from "await-of";
 import { Category } from "../models/category.model.js";
 import { ReE, ReS } from '../helper/utils.js';
 import { modifiedImage } from "../helper/uploadImage.js";
+import mongoose from "mongoose";
 
 const categoryController = {
 
@@ -50,13 +51,14 @@ const categoryController = {
                 return ReE(res, 400, { msg: "Category id is required" });
             }
 
-            const [category, categoryError] = await of(Category.findById({ _id: id }));
+            const [category, categoryError] = await of(Category.findById({ _id: mongoose.Types.ObjectId(id) }));
 
             if (categoryError) throw categoryError;
 
             return ReS(res, 200, { msg: 'Get category successfully', data: category });
 
         } catch (error) {
+            console.log("🚀 ~ file: category.controller.js:60 ~ edit: ~ error", error)
             return ReE(res, error.code, { msg: error.message });
         }
     },

@@ -16,7 +16,7 @@ export const checkAuthentication = async (req, res, next) => {
             } else {
                 var user_id = decoded._id;
                 req.body.user_id = user_id;
-                const [user, error] = await of(User.findById(user_id))
+                const [user, error] = await of(User.findById({_id:user_id}))
                 if (user) {
                     next();
                 } else {

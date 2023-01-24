@@ -6,7 +6,7 @@ import { checkAuthentication } from "../middleware/index.js";
 const router = express.Router();
 
 // Get Users
-router.get('/users', checkAuthentication, userController.index);
+router.get('/', checkAuthentication, userController.index);
 
 // Create User
 router.post('/create', checkAuthentication, CategoryMiddleware.create, userController.store);
