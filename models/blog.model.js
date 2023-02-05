@@ -6,10 +6,10 @@ var blogSchema = new mongoose.Schema({
         required: true
     },
     description: {
-        type: String,
+        type: String
     },
     content: {
-        type: String,
+        type: String
     },
     categories: {
         type: [mongoose.Schema.Types.ObjectId],
