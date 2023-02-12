@@ -11,10 +11,10 @@ router.get('/', checkAuthentication, pageController.index);
 router.post('/create', checkAuthentication, pageController.store);
 
 // Edit Page
-router.get('/:id', checkAuthentication, pageController.edit);
+router.get('/edit/:id', checkAuthentication, pageController.edit);
 
 // Update Page
-router.put('/edit/:id', checkAuthentication, pageController.update);
+router.put('/update/:id', checkAuthentication, pageController.update);
 
 // Delete Page
 router.delete('/delete/:id', checkAuthentication, pageController.delete);

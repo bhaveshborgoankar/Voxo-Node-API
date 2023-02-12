@@ -12,10 +12,10 @@ router.get('/', checkAuthentication, categoryController.index);
 router.post('/create', checkAuthentication, CategoryMiddleware.create, categoryController.store);
 
 // Edit Category
-router.get('/:id', checkAuthentication, CategoryMiddleware.edit, categoryController.edit);
+router.get('/edit/:id', checkAuthentication, CategoryMiddleware.edit, categoryController.edit);
 
 // Update Category
-router.put('/edit/:id', checkAuthentication, CategoryMiddleware.update, categoryController.update);
+router.put('/update/:id', checkAuthentication, CategoryMiddleware.update, categoryController.update);
 
 // Delete Category
 router.delete('/delete/:id', checkAuthentication, CategoryMiddleware.edit, categoryController.delete);

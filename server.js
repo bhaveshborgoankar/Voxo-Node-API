@@ -8,13 +8,14 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import swaggerUi from 'swagger-ui-express';
-import swaggerDocument from './swagger.json' assert { type: "json" };
 import routes from './routes/index.routes.js';
 import { connectDB } from './connection/db.js';
+import { readFile } from 'fs/promises';
+
+const swaggerDocument = JSON.parse(await readFile(new URL('./swagger.json', import.meta.url)));
+const __dirname = path.resolve();
 
 var app = express();
-
-const __dirname = path.resolve();
 
 app.use(express.static(path.join(__dirname, "public/")));
 

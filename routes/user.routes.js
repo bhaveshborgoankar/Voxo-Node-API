@@ -1,6 +1,5 @@
 import express from "express";
 import userController from "../controllers/user.controller.js";
-import { CategoryMiddleware } from "../middleware/category.middleware.js";
 import { checkAuthentication } from "../middleware/index.js";
 
 const router = express.Router();
@@ -9,13 +8,13 @@ const router = express.Router();
 router.get('/', checkAuthentication, userController.index);
 
 // Create User
-router.post('/create', checkAuthentication, CategoryMiddleware.create, userController.store);
+router.post('/create', checkAuthentication, userController.store);
 
 // Edit User
-router.get('/:id', checkAuthentication, userController.edit);
+router.get('/edit/:id', checkAuthentication, userController.edit);
 
-// Edit User
-router.put('/edit/:id', checkAuthentication, userController.update);
+// Update User
+router.put('/update/:id', checkAuthentication, userController.update);
 
 // Delete User
 router.delete('/delete/:id', checkAuthentication, userController.delete);

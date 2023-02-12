@@ -12,10 +12,10 @@ router.get('/', checkAuthentication, TagController.index);
 router.post('/create', TagMiddleware.create, TagController.store);
 
 // Edit Tag
-router.get('/:id', checkAuthentication, TagController.edit);
+router.get('/edit/:id', checkAuthentication, TagController.edit);
 
 // Update Tag
-router.put('/edit/:id', checkAuthentication, TagController.update);
+router.put('/update/:id', checkAuthentication, TagController.update);
 
 // Delete Tag
 router.delete('/delete/:id', checkAuthentication, TagController.delete);

@@ -11,10 +11,10 @@ router.get('/', checkAuthentication, blogController.index);
 router.post('/create', checkAuthentication, blogController.store);
 
 // Edit Blog
-router.get('/:id', checkAuthentication, blogController.edit);
+router.get('/edit/:id', checkAuthentication, blogController.edit);
 
 // Update Blog
-router.put('/edit/:id', checkAuthentication, blogController.update);
+router.put('/update/:id', checkAuthentication, blogController.update);
 
 // Delete Blog
 router.delete('/delete/:id', checkAuthentication, blogController.delete);
