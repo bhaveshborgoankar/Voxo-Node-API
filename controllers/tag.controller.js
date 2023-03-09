@@ -73,7 +73,7 @@ export const TagController = {
             const [tag, tagError] = await of(Tag.findById({ _id: id }));
             if (tagError) throw tagError;
 
-            return ReS(res, 200, { msg: 'Get tag by Id successfully', data: tag });
+            return ReS(res, 200, { msg: 'Get tag successfully', data: tag });
 
         } catch (error) {
             return ReE(res, error.code, { msg: error.message });

@@ -1,6 +1,5 @@
 import express from "express";
 import categoryController from "../controllers/category.controller.js";
-import { CategoryMiddleware } from "../middleware/category.middleware.js";
 import { checkAuthentication } from '../middleware/index.js'
 
 const router = express.Router();
@@ -9,18 +8,18 @@ const router = express.Router();
 router.get('/', checkAuthentication, categoryController.index);
 
 // Create Category
-router.post('/create', checkAuthentication, CategoryMiddleware.create, categoryController.store);
+router.post('/create', checkAuthentication, categoryController.store);
 
 // Edit Category
-router.get('/edit/:id', checkAuthentication, CategoryMiddleware.edit, categoryController.edit);
+router.get('/edit/:id', checkAuthentication, categoryController.edit);
 
 // Update Category
-router.put('/update/:id', checkAuthentication, CategoryMiddleware.update, categoryController.update);
+router.put('/update/:id', checkAuthentication, categoryController.update);
 
 // Delete Category
-router.delete('/delete/:id', checkAuthentication, CategoryMiddleware.edit, categoryController.delete);
+router.delete('/delete/:id', checkAuthentication, categoryController.delete);
 
 // Update User Status
-router.put('/:id/:status', checkAuthentication, CategoryMiddleware.status, categoryController.status);
+router.put('/:id/:status', checkAuthentication, categoryController.status);
 
 export default router;

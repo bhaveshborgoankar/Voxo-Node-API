@@ -7,6 +7,7 @@ const userController = {
     // Get User
     index: async (req, res) => {
         try {
+            
             const [users, userError] = await of(User.find({ is_deleted: false }));
             if (userError) throw userError;
 
