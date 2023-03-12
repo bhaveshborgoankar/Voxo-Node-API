@@ -1,433 +1,433 @@
 {
-    "swagger": "2.0",
-    "info": {
-      "version": "1.0.0",
-      "title": "Voxo API"
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Voxo API"
+  },
+  "host": "localhost:3000",
+  "basePath": "/api",
+  "tags": [
+    {
+      "name": "Authentication",
+      "description": "API for Authentication in the system"
     },
-    "host": "localhost:3000",
-    "basePath": "/api",
-    "tags": [
-      {
-        "name": "Authentication",
-        "description": "API for Authentication in the system"
-      },
-      {
-        "name": "Account",
-        "description": "API for Account in the system"
-      },
-      {
-        "name": "User",
-        "description": "API for User in the system"
-      },
-      {
-        "name": "Attribute",
-        "description": "API for Attribute in the system"
-      },
-      {
-        "name": "Category",
-        "description": "API for Category in the system"
-      },
-      {
-        "name": "Tag",
-        "description": "API for Tag in the system"
-      },
-      {
-        "name": "Product",
-        "description": "API for Product in the system"
-      },
-      {
-        "name": "Blog",
-        "description": "API for Blog in the system"
-      },
-      {
-        "name": "Page",
-        "description": "API for Blog in the system"
-      },
-      {
-        "name": "Coupon",
-        "description": "API for Coupon in the system"
-      },
-      {
-        "name": "Shipping",
-        "description": "API for Shipping in the system"
-      },
-      {
-        "name": "Tax",
-        "description": "API for Tax in the system"
-      },
-      {
-        "name": "Setting",
-        "description": "API for Setting in the system"
-      }
-    ],
-    "schemes": [
-      "http",
-      "https"
-    ],
-    "consumes": [
-      "application/json"
-    ],
-    "produces": [
-      "application/json"
-    ],
-    "paths": {
-        "/auth/register": {
-            "post": {
-              "tags": [
-                "Authentication"
-              ],
-              "description": "Register Account",
-              "parameters": [
-                
-              ],
-              "produces": [
-                "application/json"
-              ],
-              "responses": {
-                "405": {
-                  "description": "Invalid input",
-                  "content": {}
-                }
-              }
-            }
-        },
-        "/auth/login": {
-            "post": {
-              "tags": [
-                "Authentication"
-              ],
-              "description": "Login Account",
-              "parameters": [
-                
-              ],
-              "produces": [
-                "application/json"
-              ],
-              "responses": {
-                "405": {
-                  "description": "Invalid input",
-                  "content": {}
-                }
-              }
-            }
-        },
-        "/auth/forgetPassword": {
-            "post": {
-              "tags": [
-                "Authentication"
-              ],
-              "description": "Forgot Password",
-              "parameters": [
-                
-              ],
-              "produces": [
-                "application/json"
-              ],
-              "responses": {
-                "405": {
-                  "description": "Invalid input",
-                  "content": {}
-                }
-              }
-            }
-        },
-        "/auth/verifyOtp": {
-            "post": {
-              "tags": [
-                "Authentication"
-              ],
-              "description": "Verify OTP For Account",
-              "parameters": [
-                
-              ],
-              "produces": [
-                "application/json"
-              ],
-              "responses": {
-                "405": {
-                  "description": "Invalid input",
-                  "content": {}
-                }
-              }
-            }
-        },
-        "/auth/resetPassword": {
-            "post": {
-              "tags": [
-                "Authentication"
-              ],
-              "description": "ResetPassword For Account",
-              "parameters": [
-                
-              ],
-              "produces": [
-                "application/json"
-              ],
-              "responses": {
-                "405": {
-                  "description": "Invalid input",
-                  "content": {}
-                }
-              }
-            }
-        },
-        "/account/getUserDetail": {
-            "get": {
-              "tags": [
-                "Account"
-              ],
-              "description": "Get User Details",
-              "produces": [
-                "application/json"
-              ],
-              "responses": {
-                "405": {
-                  "description": "Invalid input",
-                  "content": {}
-                }
-              },
-              "security": [
-                {
-                  "JWT": []
-                }
-              ]
-            }
-        },
-        "/account/updateProfile": {
-            "put": {
-              "tags": [
-                "Account"
-              ],
-              "description": "Update Profile For Account",
-              "parameters": [
-                
-              ],
-              "produces": [
-                "application/json"
-              ],
-              "responses": {
-                "405": {
-                  "description": "Invalid input",
-                  "content": {}
-                }
-              },
-              "security": [
-                {
-                  "JWT": []
-                }
-              ]
-            }
-        },
-        "/account/updatePassword": {
-            "put": {
-              "tags": [
-                "Account"
-              ],
-              "description": "Update Pssword For Account",
-              "parameters": [
-                
-              ],
-              "produces": [
-                "application/json"
-              ],
-              "responses": {
-                "405": {
-                  "description": "Invalid input",
-                  "content": {}
-                }
-              },
-              "security": [
-                {
-                  "JWT": []
-                }
-              ]
-            }
-        },
-        "/user": {
-            "get": {
-              "tags": [
-                "User"
-              ],
-              "description": "Get All User",
-              "produces": [
-                "application/json"
-              ],
-              "responses": {
-                "405": {
-                  "description": "Invalid input",
-                  "content": {}
-                }
-              },
-              "security": [
-                {
-                  "JWT": []
-                }
-              ]
-            }
-        },
-        "/user/create": {
-            "post": {
-              "tags": [
-                "User"
-              ],
-              "description": "Create User",
-              "parameters": [
-                
-              ],
-              "produces": [
-                "application/json"
-              ],
-              "responses": {
-                "405": {
-                  "description": "Invalid input",
-                  "content": {}
-                }
-              },
-              "security": [
-                {
-                  "JWT": []
-                }
-              ]
-            }
-        },
-        "/user/edit/{id}": {
-            "get": {
-              "tags": [
-                "User"
-              ],
-              "description": "Edit User",
-              "parameters": [
-                {
-                    "name": "id",
-                    "in": "path",
-                    "description": "",
-                    "required": true,
-                    "type": "string"
-                }
-              ],
-              "produces": [
-                "application/json"
-              ],
-              "responses": {
-                "405": {
-                  "description": "Invalid input",
-                  "content": {}
-                }
-              },
-              "security": [
-                {
-                  "JWT": []
-                }
-              ]
-            }
-        },
-        "/user/update/{id}": {
-            "put": {
-              "tags": [
-                "User"
-              ],
-              "description": "Update User",
-              "parameters": [
-                {
-                    "name": "id",
-                    "in": "path",
-                    "description": "",
-                    "required": true,
-                    "type": "string"
-                }
-              ],
-              "produces": [
-                "application/json"
-              ],
-              "responses": {
-                "405": {
-                  "description": "Invalid input",
-                  "content": {}
-                }
-              },
-              "security": [
-                {
-                  "JWT": []
-                }
-              ]
-            }
-        },
-        "/user/delete/{id}": {
-            "delete": {
-              "tags": [
-                "User"
-              ],
-              "description": "Delete User",
-              "parameters": [
-                {
-                    "name": "id",
-                    "in": "path",
-                    "description": "",
-                    "required": true,
-                    "type": "string"
-                }
-              ],
-              "produces": [
-                "application/json"
-              ],
-              "responses": {
-                "405": {
-                  "description": "Invalid input",
-                  "content": {}
-                }
-              },
-              "security": [
-                {
-                  "JWT": []
-                }
-              ]
-            }
-        },
-        "/user/{id}/{status}": {
-            "put": {
-              "tags": [
-                "User"
-              ],
-              "description": "Update User Status",
-              "parameters": [
-                {
-                    "name": "id",
-                    "in": "path",
-                    "description": "",
-                    "required": true,
-                    "type": "string"
-                },
-                {
-                    "name": "status",
-                    "in": "path",
-                    "description": "",
-                    "required": true,
-                    "type": "string"
-                }
-              ],
-              "produces": [
-                "application/json"
-              ],
-              "responses": {
-                "405": {
-                  "description": "Invalid input",
-                  "content": {}
-                }
-              },
-              "security": [
-                {
-                  "JWT": []
-                }
-              ]
-            }
-        }
+    {
+      "name": "Account",
+      "description": "API for Account in the system"
     },
-    "securityDefinitions":{
-      "JWT": {
-        "description": "",
-        "type": "apiKey",
-        "name": "Authorization",
-        "in": "header"
+    {
+      "name": "User",
+      "description": "API for User in the system"
+    },
+    {
+      "name": "Attribute",
+      "description": "API for Attribute in the system"
+    },
+    {
+      "name": "Category",
+      "description": "API for Category in the system"
+    },
+    {
+      "name": "Tag",
+      "description": "API for Tag in the system"
+    },
+    {
+      "name": "Product",
+      "description": "API for Product in the system"
+    },
+    {
+      "name": "Blog",
+      "description": "API for Blog in the system"
+    },
+    {
+      "name": "Page",
+      "description": "API for Blog in the system"
+    },
+    {
+      "name": "Coupon",
+      "description": "API for Coupon in the system"
+    },
+    {
+      "name": "Shipping",
+      "description": "API for Shipping in the system"
+    },
+    {
+      "name": "Tax",
+      "description": "API for Tax in the system"
+    },
+    {
+      "name": "Setting",
+      "description": "API for Setting in the system"
+    }
+  ],
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+      "/auth/register": {
+          "post": {
+            "tags": [
+              "Authentication"
+            ],
+            "description": "Register Account",
+            "parameters": [
+              
+            ],
+            "produces": [
+              "application/json"
+            ],
+            "responses": {
+              "405": {
+                "description": "Invalid input",
+                "content": {}
+              }
+            }
+          }
+      },
+      "/auth/login": {
+          "post": {
+            "tags": [
+              "Authentication"
+            ],
+            "description": "Login Account",
+            "parameters": [
+              
+            ],
+            "produces": [
+              "application/json"
+            ],
+            "responses": {
+              "405": {
+                "description": "Invalid input",
+                "content": {}
+              }
+            }
+          }
+      },
+      "/auth/forgetPassword": {
+          "post": {
+            "tags": [
+              "Authentication"
+            ],
+            "description": "Forgot Password",
+            "parameters": [
+              
+            ],
+            "produces": [
+              "application/json"
+            ],
+            "responses": {
+              "405": {
+                "description": "Invalid input",
+                "content": {}
+              }
+            }
+          }
+      },
+      "/auth/verifyOtp": {
+          "post": {
+            "tags": [
+              "Authentication"
+            ],
+            "description": "Verify OTP For Account",
+            "parameters": [
+              
+            ],
+            "produces": [
+              "application/json"
+            ],
+            "responses": {
+              "405": {
+                "description": "Invalid input",
+                "content": {}
+              }
+            }
+          }
+      },
+      "/auth/resetPassword": {
+          "post": {
+            "tags": [
+              "Authentication"
+            ],
+            "description": "ResetPassword For Account",
+            "parameters": [
+              
+            ],
+            "produces": [
+              "application/json"
+            ],
+            "responses": {
+              "405": {
+                "description": "Invalid input",
+                "content": {}
+              }
+            }
+          }
+      },
+      "/account/getUserDetail": {
+          "get": {
+            "tags": [
+              "Account"
+            ],
+            "description": "Get User Details",
+            "produces": [
+              "application/json"
+            ],
+            "responses": {
+              "405": {
+                "description": "Invalid input",
+                "content": {}
+              }
+            },
+            "security": [
+              {
+                "JWT": []
+              }
+            ]
+          }
+      },
+      "/account/updateProfile": {
+          "put": {
+            "tags": [
+              "Account"
+            ],
+            "description": "Update Profile For Account",
+            "parameters": [
+              
+            ],
+            "produces": [
+              "application/json"
+            ],
+            "responses": {
+              "405": {
+                "description": "Invalid input",
+                "content": {}
+              }
+            },
+            "security": [
+              {
+                "JWT": []
+              }
+            ]
+          }
+      },
+      "/account/updatePassword": {
+          "put": {
+            "tags": [
+              "Account"
+            ],
+            "description": "Update Pssword For Account",
+            "parameters": [
+              
+            ],
+            "produces": [
+              "application/json"
+            ],
+            "responses": {
+              "405": {
+                "description": "Invalid input",
+                "content": {}
+              }
+            },
+            "security": [
+              {
+                "JWT": []
+              }
+            ]
+          }
+      },
+      "/user": {
+          "get": {
+            "tags": [
+              "User"
+            ],
+            "description": "Get All User",
+            "produces": [
+              "application/json"
+            ],
+            "responses": {
+              "405": {
+                "description": "Invalid input",
+                "content": {}
+              }
+            },
+            "security": [
+              {
+                "JWT": []
+              }
+            ]
+          }
+      },
+      "/user/create": {
+          "post": {
+            "tags": [
+              "User"
+            ],
+            "description": "Create User",
+            "parameters": [
+              
+            ],
+            "produces": [
+              "application/json"
+            ],
+            "responses": {
+              "405": {
+                "description": "Invalid input",
+                "content": {}
+              }
+            },
+            "security": [
+              {
+                "JWT": []
+              }
+            ]
+          }
+      },
+      "/user/edit/{id}": {
+          "get": {
+            "tags": [
+              "User"
+            ],
+            "description": "Edit User",
+            "parameters": [
+              {
+                  "name": "id",
+                  "in": "path",
+                  "description": "",
+                  "required": true,
+                  "type": "string"
+              }
+            ],
+            "produces": [
+              "application/json"
+            ],
+            "responses": {
+              "405": {
+                "description": "Invalid input",
+                "content": {}
+              }
+            },
+            "security": [
+              {
+                "JWT": []
+              }
+            ]
+          }
+      },
+      "/user/update/{id}": {
+          "put": {
+            "tags": [
+              "User"
+            ],
+            "description": "Update User",
+            "parameters": [
+              {
+                  "name": "id",
+                  "in": "path",
+                  "description": "",
+                  "required": true,
+                  "type": "string"
+              }
+            ],
+            "produces": [
+              "application/json"
+            ],
+            "responses": {
+              "405": {
+                "description": "Invalid input",
+                "content": {}
+              }
+            },
+            "security": [
+              {
+                "JWT": []
+              }
+            ]
+          }
+      },
+      "/user/delete/{id}": {
+          "delete": {
+            "tags": [
+              "User"
+            ],
+            "description": "Delete User",
+            "parameters": [
+              {
+                  "name": "id",
+                  "in": "path",
+                  "description": "",
+                  "required": true,
+                  "type": "string"
+              }
+            ],
+            "produces": [
+              "application/json"
+            ],
+            "responses": {
+              "405": {
+                "description": "Invalid input",
+                "content": {}
+              }
+            },
+            "security": [
+              {
+                "JWT": []
+              }
+            ]
+          }
+      },
+      "/user/{id}/{status}": {
+          "put": {
+            "tags": [
+              "User"
+            ],
+            "description": "Update User Status",
+            "parameters": [
+              {
+                  "name": "id",
+                  "in": "path",
+                  "description": "",
+                  "required": true,
+                  "type": "string"
+              },
+              {
+                  "name": "status",
+                  "in": "path",
+                  "description": "",
+                  "required": true,
+                  "type": "string"
+              }
+            ],
+            "produces": [
+              "application/json"
+            ],
+            "responses": {
+              "405": {
+                "description": "Invalid input",
+                "content": {}
+              }
+            },
+            "security": [
+              {
+                "JWT": []
+              }
+            ]
+          }
       }
+  },
+  "securityDefinitions":{
+    "JWT": {
+      "description": "",
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
     }
   }
+}

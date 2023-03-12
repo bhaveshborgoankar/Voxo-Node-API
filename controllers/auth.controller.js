@@ -8,6 +8,22 @@ import { ReE, ReS } from '../helper/utils.js';
 
 const authController = {
 
+    // Register
+    register: async (req, res) => {
+        try {
+            const { email, password, name, phone } = req.body;
+            const [user] = await of(User.create({
+                email: email,
+                password: password,
+                name: name,
+                phone: phone
+            }));
+            return ReS(res, 201, { msg: "User Registered Successfully.", data: user });
+        } catch (error) {
+            return ReE(res, error.code, { msg: error.message });
+        }
+    },
+
     // Login
     login: async (req, res) => {
         try {
@@ -31,22 +47,6 @@ const authController = {
                 return ReE(res, 404, { msg: "Authentication failed. Incorrect Email or Password" });
             }
 
-        } catch (error) {
-            return ReE(res, error.code, { msg: error.message });
-        }
-    },
-
-    // Register
-    register: async (req, res) => {
-        try {
-            const { email, password, name, phone } = req.body;
-            const [user] = await of(User.create({
-                email: email,
-                password: password,
-                name: name,
-                phone: phone
-            }));
-            return ReS(res, 201, { msg: "User Registered Successfully.", data: user });
         } catch (error) {
             return ReE(res, error.code, { msg: error.message });
         }
