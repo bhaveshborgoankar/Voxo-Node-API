@@ -1,9 +1,14 @@
 import mongoose from "mongoose";
+import slugify from "slugify";
 
 var blogSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true
+    },
+    slug: {
+        type: String,
+        unique: true
     },
     description: {
         type: String
@@ -36,6 +41,14 @@ var blogSchema = new mongoose.Schema({
         createdAt: 'created_at',
         updatedAt: 'updated_at'
     }
+});
+
+blogSchema.pre("save", function (next) {
+    this.slug = slugify(this.name, {
+        lower: true,
+        remove: /[*+~.()'"!:@]/g
+    });
+    next();
 });
 
 const Blog = mongoose.model('blogs', blogSchema);

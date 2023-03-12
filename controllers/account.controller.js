@@ -6,69 +6,72 @@ import { ReE, ReS } from '../helper/utils.js';
 const accountController = {
 
     // Get User Details
-    getUerDetails: async (req, res) => {
-        try {
-            const { user_id } = req.body;
-            const [user, error] = await of(User.findOne({_id: mongoose.Types.ObjectId(user_id)}));
-            if (error) throw error;
-            return ReS(res, 200, { data: user });
-        } catch (error) {
-            return ReE(res, error.code, { msg: error.message });
-        }
+    getUserDetails: async (req, res) => {
+      try {
+          const { user_id } = req.body;
+
+          const user = await User.findById(user_id);
+          if (!user) {
+              throw new Error("User not found");
+          }
+
+          return ReS(res, 200, { data: user });
+
+      } catch (error) {
+          return ReE(res, error.code, { msg: error.message });
+      }
     },
+
 
     // Update Profile
     updateProfile: async (req, res) => {
-        try {
+      try {
+          const { user_id, name, email, phone } = req.body;
 
-            const { user_id, name, email, phone } = req.body;
-      
-            const [updateResult, updateError] = await of(
-                User.updateOne(
-                  {
-                    _id: mongoose.Types.ObjectId(user_id),
-                  },
-                  { 
-                    $set: { 
-                        name: name,
-                        email: email,
-                        phone: phone
-                    } 
-                  }
-                )
-              );
-              if (updateError) throw updateError;
-              return ReS(res, 200, { msg: "Profile Updated Successfully" });
+          const [updateResult, updateError] = await of(
+              User.updateOne(
+                  { _id: mongoose.Types.ObjectId(user_id) },
+                  { $set: { name, email, phone } }
+              )
+          );
+          if (updateError) throw updateError;
+          return ReS(res, 200, { msg: "Profile updated successfully" });
 
-        } catch (error) {
-            return ReE(res, error.code, { msg: error.message });
-        }
+      } catch (error) {
+          return ReE(res, error.code, { msg: error.message });
+      }
     },
 
     // Update Password
     updatePassword: async (req, res) => {
-        try {
-            
-            const { user_id, password } = req.body;
+      try {
+          const { user_id, current_password, password } = req.body;
 
-            var new_password = bcrypt.hashSync(password, 8);
-      
-            const [updateResult, updateError] = await of(
-                User.updateOne(
-                  {
-                    _id: mongoose.Types.ObjectId(user_id),
-                  },
-                  { 
-                    $set: { password: new_password } 
-                  }
-                )
-              );
-              if (updateError) throw updateError;
-              return ReS(res, 200, { msg: "Password Updated Successfully" });
+          const user = await User.findById(user_id);
+          if (!user) {
+              throw new Error("User not found");
+          }
 
-        } catch (error) {
-            return ReE(res, error.code, { msg: error.message });
-        }
+          const passwordMatch = await bcrypt.compare(current_password, user.password);
+          if (!passwordMatch) {
+              throw new Error("Current password is incorrect");
+          }
+
+          const newHashedPassword = await bcrypt.hash(password, 8);
+
+          const [updateResult, updateError] = await of(
+              User.updateOne(
+                  { _id: mongoose.Types.ObjectId(user_id) },
+                  { $set: { password: newHashedPassword } }
+              )
+          );
+          if (updateError) throw updateError;
+          return ReS(res, 200, { msg: "Password updated successfully" });
+
+      } catch (error) {
+          return ReE(res, error.code, { msg: error.message });
+      }
     },
+
 
 }

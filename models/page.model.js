@@ -1,9 +1,14 @@
 import mongoose from "mongoose";
+import slugify from "slugify";
 
 var pageSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true
+    },
+    slug: {
+        type: String,
+        unique: true
     },
     content: {
         type: String,
@@ -25,6 +30,15 @@ var pageSchema = new mongoose.Schema({
         createdAt: 'created_at',
         updatedAt: 'updated_at'
     }
+});
+
+// Middleware to create slug before saving
+pageSchema.pre("save", function (next) {
+  if (!this.isModified("name")) {
+    return next();
+  }
+  this.slug = slugify(this.name, { lower: true });
+  next();
 });
 
 const Page = mongoose.model('pages', pageSchema);

@@ -7,26 +7,35 @@ export const TagController = {
     // Get Tags
     index: async (req, res) => {
         try {
-
-            const { type } = req.query
-
-            const filter = {
-                is_deleted: false
-            };
-
-            if(type) { 
-                filter.type = type;
-            }
-
-            const [tags, tagsError] = await of(Tag.find(filter));
-            if (tagsError) throw tagsError;
-
-            return ReS(res, 200, { msg: "Get all tags successfully", data: tags });
-
+        const { type, limit, page, search } = req.query;
+        const perPage = parseInt(limit) || 0;
+        const currentPage = parseInt(page) || 1;
+        const searchQuery = search ? { name: { $regex: search, $options: 'i' } } : {};
+        const filter = {
+            ...searchQuery,
+            is_deleted: false
+        };
+        if (type) filter.type = type;
+        const [tags, tagsError] = await of(
+            Tag.find(filter)
+            .skip(perPage * (currentPage - 1))
+            .limit(perPage > 0 ? perPage : 0)
+            .sort({ created_at: 'desc' })
+        );
+        if (tagsError) throw tagsError;
+        const count = await Tag.countDocuments(filter);
+        return ReS(res, 200, {
+            msg: 'Get all tags successfully',
+            data: tags,
+            current_page: currentPage,
+            pages: perPage > 0 ? Math.ceil(count / perPage) : 1,
+            total: count
+        });
         } catch (error) {
-            return ReE(res, error.code, { msg: error.message });
+        return ReE(res, error.code, { msg: error.message });
         }
     },
+  
 
     // Store Tags
     store: async (req, res) => {

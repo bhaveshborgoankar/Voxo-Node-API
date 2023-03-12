@@ -7,11 +7,44 @@ const userController = {
     // Get User
     index: async (req, res) => {
         try {
-            
-            const [users, userError] = await of(User.find({ is_deleted: false }));
+            const { page, limit, search } = req.query;
+
+            // set default values if page and limit are not provided
+            const perPage = parseInt(limit) || 0;
+            const currentPage = parseInt(page) || 1;
+
+            const filter = {
+                is_deleted: false
+            };
+
+            if (search) {
+                filter.$or = [
+                    { name: { $regex: search, $options: 'i' } },
+                    { email: { $regex: search, $options: 'i' } }
+                ];
+            }
+
+            const [users, userError] = await of(User.find(filter)
+                                                .skip((perPage * currentPage) - perPage)
+                                                .limit(perPage)
+                                                .sort({ created_at: 'desc' })
+                                                .exec());
             if (userError) throw userError;
 
-            return ReS(res, 200, { msg: 'Get all users successfully', data: users, success: true });
+            const count = await User.countDocuments(filter);
+            const totalPages = Math.ceil(count / perPage);
+
+            return ReS(res, 200, {
+                msg: 'Get all users successfully',
+                data: users,
+                success: true,
+                pagination: {
+                    total: count,
+                    per_page: perPage,
+                    current_page: currentPage,
+                    last_page: totalPages
+                }
+            });
         } catch (error) {
             return ReE(res, error.code, { msg: error.message, success: false });
         }

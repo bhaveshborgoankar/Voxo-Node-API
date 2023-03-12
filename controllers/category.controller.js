@@ -6,17 +6,37 @@ import mongoose from "mongoose";
 
 const categoryController = {
 
-    // Get Category
+    // Get Categories
     index: async (req, res) => {
         try {
-            const [category, categoryError] = await of(Category.find({ is_deleted: false }));
-            if (categoryError) throw categoryError;
-            return ReS(res, 200, { msg: "Get all categories successfully", data: category });
+        const { limit, page, search } = req.query;
+        const perPage = parseInt(limit) || 0;
+        const currentPage = parseInt(page) || 1;
+        const searchQuery = search ? { name: { $regex: search, $options: 'i' } } : {};
+        const filter = {
+            ...searchQuery,
+            is_deleted: false
+        };
+        const [categories, categoriesError] = await of(
+            Category.find(filter)
+            .skip(perPage * (currentPage - 1))
+            .limit(perPage > 0 ? perPage : 0)
+            .sort({ created_at: 'desc' })
+        );
+        if (categoriesError) throw categoriesError;
+        const count = await Category.countDocuments(filter);
+        return ReS(res, 200, {
+            msg: 'Get all categories successfully',
+            data: categories,
+            current_page: currentPage,
+            pages: perPage > 0 ? Math.ceil(count / perPage) : 1,
+            total: count
+        });
         } catch (error) {
-            return ReE(res, error.code, { msg: error.message });
+        return ReE(res, error.code, { msg: error.message });
         }
     },
-
+  
     // Store Category
     store: async (req, res) => {
         try {
@@ -58,7 +78,6 @@ const categoryController = {
             return ReS(res, 200, { msg: 'Get category successfully', data: category });
 
         } catch (error) {
-            console.log("🚀 ~ file: category.controller.js:60 ~ edit: ~ error", error)
             return ReE(res, error.code, { msg: error.message });
         }
     },
