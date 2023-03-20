@@ -11,14 +11,14 @@ import swaggerUi from 'swagger-ui-express';
 import routes from './routes/index.routes.js';
 import { connectDB } from './connection/db.js';
 import { readFile } from 'fs/promises';
-
+import cors from 'cors'
 const swaggerDocument = JSON.parse(await readFile(new URL('./swagger.json', import.meta.url)));
 const __dirname = path.resolve();
 
 var app = express();
 
 app.use(express.static(path.join(__dirname, "public/")));
-
+app.use(cors())
 // enable files upload
 app.use(fileUpload({
     createParentPath: true

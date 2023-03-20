@@ -32,7 +32,7 @@ export const TagController = {
             total: count
         });
         } catch (error) {
-        return ReE(res, error.code, { msg: error.message });
+        return ReE(res, 400, { msg: error.message });
         }
     },
   
@@ -65,7 +65,7 @@ export const TagController = {
             }
 
         } catch (error) {
-            return ReE(res, error.code, { msg: error.message });
+            return ReE(res, 400, { msg: error.message });
         }
     },
 
@@ -85,7 +85,7 @@ export const TagController = {
             return ReS(res, 200, { msg: 'Get tag successfully', data: tag });
 
         } catch (error) {
-            return ReE(res, error.code, { msg: error.message });
+            return ReE(res, 400, { msg: error.message });
         }
     },
 
@@ -116,7 +116,7 @@ export const TagController = {
             return ReS(res, 200, { msg: "Tag updated successfully", data: result });
 
         } catch (error) {
-            return ReE(res, error.code, { msg: error.message });
+            return ReE(res, 400, { msg: error.message });
         };
     },
 
@@ -141,7 +141,7 @@ export const TagController = {
             return ReS(res, 200, { msg: "Tag delete successfully" });
 
         } catch (error) {
-            return ReE(res, error.code, { msg: error.message });
+            return ReE(res, 400, { msg: error.message });
         }
 
     },
@@ -166,7 +166,7 @@ export const TagController = {
             if (statusUpdate) return ReS(res, 200, { msg: "Tag status is updated" });
 
         } catch (error) {
-            return ReE(res, error.code, { msg: error.message });
+            return ReE(res, 400, { msg: error.message });
         }
     },
 };

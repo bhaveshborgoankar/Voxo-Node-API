@@ -46,7 +46,7 @@ const userController = {
                 }
             });
         } catch (error) {
-            return ReE(res, error.code, { msg: error.message, success: false });
+            return ReE(res, 400, { msg: error.message, success: false });
         }
     },
 
@@ -64,7 +64,7 @@ const userController = {
             // return ReS(res, 200, "User create successfully", user);
             return ReS(res, 200, { msg: 'User create successfully', data: user, success: true });
         } catch (error) {
-            return ReE(res, error.code, { msg: error.message, success: false });;
+            return ReE(res, 400, { msg: error.message, success: false });;
         };
     },
 
@@ -83,7 +83,7 @@ const userController = {
 
             return ReS(res, 200, { msg: 'Get user by Id successfully', data: user, success: true });
         } catch (error) {
-            return ReE(res, error.code, { msg: error.message, success: false });
+            return ReE(res, 400, { msg: error.message, success: false });
         }
     },
 
@@ -95,10 +95,10 @@ const userController = {
             const { id } = req.params;
 
             if (!id) {
-                return ReE(res, 400, { msg: "User id is required" });
+                return ReE(res, 400, { msg: "id is required" });
             }
 
-            const { name, email, phone, is_active, street, state, zip } = req.body;
+            const { name, email, phone } = req.body;
 
             const [user, userError] = await of(User.find({ _id: id }));
             if (userError) throw userError;
@@ -118,9 +118,6 @@ const userController = {
                 if (phone) {
                     updateUser.phone = phone
                 };
-                if (is_active) {
-                    updateUser.is_active = is_active
-                };
 
             }
 
@@ -130,7 +127,7 @@ const userController = {
             return ReS(res, 200, { msg: "User update Successfully!", data: result, success: true });
 
         } catch (error) {
-            return ReE(res, error.code, { msg: error.message, success: false });
+            return ReE(res, 400, { msg: error.message, success: false });
         }
     },
 
@@ -151,7 +148,7 @@ const userController = {
             return ReS(res, 200, { msg: "User delete successfully!", success: true });
 
         } catch (error) {
-            return ReE(res, error.code, { msg: error.message, success: false });
+            return ReE(res, 400, { msg: error.message, success: false });
         }
     },
 
@@ -175,7 +172,7 @@ const userController = {
             return ReS(res, 200, { msg: "User status is updated", success: true });
 
         } catch (error) {
-            return ReE(res, error.code, { msg: error.message, success: false });
+            return ReE(res, 400, { msg: error.message, success: false });
         }
     },
 }

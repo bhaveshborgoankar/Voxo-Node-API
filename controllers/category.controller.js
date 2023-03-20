@@ -33,7 +33,7 @@ const categoryController = {
             total: count
         });
         } catch (error) {
-        return ReE(res, error.code, { msg: error.message });
+        return ReE(res, 400, { msg: error.message });
         }
     },
   
@@ -57,7 +57,7 @@ const categoryController = {
             }
 
         } catch (error) {
-            return ReE(res, error.code, { msg: error.message });
+            return ReE(res, 400, { msg: error.message });
         };
     },
 
@@ -78,7 +78,7 @@ const categoryController = {
             return ReS(res, 200, { msg: 'Get category successfully', data: category });
 
         } catch (error) {
-            return ReE(res, error.code, { msg: error.message });
+            return ReE(res, 400, { msg: error.message });
         }
     },
 
@@ -115,7 +115,7 @@ const categoryController = {
             return ReS(res, 200, { msg: "Category updated successfully", data: result });
 
         } catch (error) {
-            return ReE(res, error.code, { msg: error.message });
+            return ReE(res, 400, { msg: error.message });
         };
     },
 
@@ -141,7 +141,7 @@ const categoryController = {
             return ReS(res, 200, { msg: "Category delete successfully" });
 
         } catch (error) {
-            return ReE(res, error.code, { msg: error.message });
+            return ReE(res, 400, { msg: error.message });
         }
 
     },
@@ -169,7 +169,7 @@ const categoryController = {
             if (statusUpdate) return ReS(res, 200, { msg: "Category status is updated" });
 
         } catch (error) {
-            return ReE(res, error.code, { msg: error.message });
+            return ReE(res, 400, { msg: error.message });
         }
     },
 

@@ -20,7 +20,7 @@ const authController = {
             }));
             return ReS(res, 201, { msg: "User Registered Successfully.", data: user });
         } catch (error) {
-            return ReE(res, error.code, { msg: error.message });
+            return ReE(res, 400, { msg: error.message });
         }
     },
 
@@ -48,7 +48,7 @@ const authController = {
             }
 
         } catch (error) {
-            return ReE(res, error.code, { msg: error.message });
+            return ReE(res, 400, { msg: error.message });
         }
     },
 
@@ -76,7 +76,7 @@ const authController = {
             }
 
         } catch (error) {
-            return ReE(res, error.code, { msg: error.message });
+            return ReE(res, 400, { msg: error.message });
         }
     },
 
@@ -125,7 +125,7 @@ const authController = {
             return ReS(res, 200, { msg: 'User password has been reset' });
 
         } catch (error) {
-            return ReE(res, error.code, { msg: error.message });
+            return ReE(res, 400, { msg: error.message });
         }
     }
 

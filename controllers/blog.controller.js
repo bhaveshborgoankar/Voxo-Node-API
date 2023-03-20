@@ -33,7 +33,7 @@ const blogController = {
                 total: count
             });
         } catch (error) {
-            return ReE(res, error.code, { msg: error.message });
+            return ReE(res, 400, { msg: error.message });
         }
     },
 
@@ -58,7 +58,7 @@ const blogController = {
             return ReS(res, 201, { msg: "Blog created successfully", data: savedBlog });
 
         } catch (error) {
-            return ReE(res, error.code, { msg: error.message });
+            return ReE(res, 400, { msg: error.message });
         };
     },
 
@@ -73,7 +73,7 @@ const blogController = {
             return ReS(res, 200, { data: blog });
 
         } catch (error) {
-            return ReE(res, error.code, { msg: error.message });
+            return ReE(res, 400, { msg: error.message });
         }
     },
 
@@ -100,7 +100,7 @@ const blogController = {
             return ReS(res, 200, { msg: "Blog updated successfully" });
 
         } catch (error) {
-            return ReE(res, error.code, { msg: error.message });
+            return ReE(res, 400, { msg: error.message });
         };
     },
 
@@ -118,7 +118,7 @@ const blogController = {
             return ReS(res, 200, { msg: "Blog deleted successfully" });
 
         } catch (error) {
-            return ReE(res, error.code, { msg: error.message });
+            return ReE(res, 400, { msg: error.message });
         }
 
     },

@@ -33,7 +33,7 @@ const pageController = {
                 total: count
             });
         } catch (error) {
-            return ReE(res, error.code, { msg: error.message });
+            return ReE(res, 400, { msg: error.message });
         }
     },
 
@@ -54,7 +54,7 @@ const pageController = {
             return ReS(res, 201, { msg: "Page created successfully", data: savedPage });
 
         } catch (error) {
-            return ReE(res, error.code, { msg: error.message });
+            return ReE(res, 400, { msg: error.message });
         };
     },
 
@@ -69,7 +69,7 @@ const pageController = {
             return ReS(res, 200, { data: page });
 
         } catch (error) {
-            return ReE(res, error.code, { msg: error.message });
+            return ReE(res, 400, { msg: error.message });
         }
     },
 
@@ -93,7 +93,7 @@ const pageController = {
             return ReS(res, 200, { msg: "Page updated successfully" });
 
         } catch (error) {
-            return ReE(res, error.code, { msg: error.message });
+            return ReE(res, 400, { msg: error.message });
         };
     },
 
@@ -111,7 +111,7 @@ const pageController = {
             return ReS(res, 200, { msg: "Page deleted successfully" });
 
         } catch (error) {
-            return ReE(res, error.code, { msg: error.message });
+            return ReE(res, 400, { msg: error.message });
         }
 
     },
